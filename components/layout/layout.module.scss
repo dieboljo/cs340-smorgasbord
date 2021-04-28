@@ -1,0 +1,22 @@
+@import "config";
+
+.container {
+	background-color: rgba($background-color, 0.6);
+	height: 100%;
+	line-height: 1.6;
+}
+
+.main {
+	color: $color;
+	display: flex;
+	flex-direction: column;
+	font-family: $font, sans-serif;
+	a {
+		color: $color-link;
+		text-decoration: none;
+		&:hover {
+            opacity: 0.7;
+        }
+    }
+}
+
