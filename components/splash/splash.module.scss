@@ -3,7 +3,7 @@
 @import "config";
 
 .background {
-	background-image: url($splash-mobile);
+	//background-image: url($splash-mobile);
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;
@@ -11,7 +11,7 @@
 	height: 100vh;
 	@media only screen and (min-width: 1224px) {
 		background-attachment: fixed;
-		background-image: url($splash-desktop);
+		//background-image: url($splash-desktop);
 	}
 }
 
