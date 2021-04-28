@@ -2,7 +2,6 @@ import { useState } from "react"
 import Router from "next/router"
 
 import Button from "@/components/button"
-import ToggleSwitch from "@/components/toggle-switch"
 import styles from "./customer-login.module.scss"
 
 export const CustomerLogin = () => {
@@ -11,6 +10,7 @@ export const CustomerLogin = () => {
     const [submitting, setSubmitting] = useState(false)
     const [register, toggleRegister] = useState(false)
     let buttonText = register ? "Register" : "Login";
+    let toggleText = register ? "login" : "register";
 
     async function submitHandler(e) {
         setSubmitting(true)
@@ -41,12 +41,11 @@ export const CustomerLogin = () => {
     }
 
     return (
-        <form onSubmit={submitHandler}>
-            <div>
-                <label htmlFor='email'>
-                    <h3>Email</h3>
-                </label>
+        <form className={styles.form} onSubmit={submitHandler}>
+            <div className={styles.field}>
+                <label className={styles.label} htmlFor='email'>Email</label>
                 <input
+                    className={styles.input}
                     id='email'
                     type='email'
                     name='email'
@@ -54,27 +53,25 @@ export const CustomerLogin = () => {
                     onChange={(e) => setEmail(e.target.value)}
                 />
             </div>
-            <div className={styles.switch}>
-                Register:
-                <ToggleSwitch onToggle={() => toggleRegister(!register)} />
-            </div>
             {register && 
-                <div>
-                    <label htmlFor='name'>
-                        <h3>Name</h3>
-                    </label>
+                <div className={styles.field}>
+                    <label className={styles.label} htmlFor='name'>Name</label>
                     <input
+                        className={styles.input}
                         id='name'
-                        type='name'
+                        type='text'
                         name='name'
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                     />
                 </div>
             }
-            <Button disabled={submitting} type='submit'>
-                {submitting ? "Working ..." : buttonText}
-            </Button>
+            <div className={styles.toggle} onClick={() => toggleRegister(!register)}>{toggleText}</div>
+            <div className={styles.submit}>
+                <Button disabled={submitting} type='submit'>
+                    {submitting ? "Working ..." : buttonText}
+                </Button>
+            </div>
         </form>
     )
 }

@@ -2,7 +2,7 @@ import cn from "clsx";
 import { useState } from "react";
 import styles from "./toggle-switch.module.scss"
 
-export const ToggleSwitch = ({ onToggle }) => {
+export const ToggleSwitch = ({ left, right, onToggle }) => {
     return (
         <div className={styles.switch}>
             <input 
@@ -12,6 +12,7 @@ export const ToggleSwitch = ({ onToggle }) => {
                 onChange={onToggle}
             />
             <label className={styles.switchLabel} htmlFor="switch"></label>
+            <p className={styles.left}>{left}</p><p className={styles.right}>{right}</p>
         </div>
     )
 }

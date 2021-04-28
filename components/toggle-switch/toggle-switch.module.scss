@@ -1,19 +1,20 @@
-$base-color: #fff596;
-$accent-color: #d43606;
-$comp-color: #a5abaf;
+$base-color: black;
+$accent-color: black;
+$comp-color: black;
 
 .switch {
     height: 90px;
     position: relative;
     p {
+		font-weight: bold;
         position: absolute;
         &.left {
-            left: -85px;
-            top: -5px;
+            left: 50px;
+			top: 30px;
 		}
         &.right {
-            left: 150px;
-            top: -5px;
+			right: 50px;
+			top: 30px;
 		}
 	}
 }
