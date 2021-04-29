@@ -35,10 +35,10 @@ export const BrandLogin = () => {
                     onChange={(e) => setName(e.target.value)}
                 />
             </div>
-            <div className={styles.field}>
+            <div className={`${styles.field} ${styles.fileField}`}>
                 <label className={styles.label} htmlFor="logo">Brand logo (PNG, JPG)</label>
                 <input 
-                    className={styles.input}
+                    className={`${styles.input} ${styles.fileInput}`}
                     type="file" 
                     id="logo" 
                     name="logo" 
@@ -83,7 +83,7 @@ export const BrandLogin = () => {
             });
             const uploadJson = await uploadRes.json()
             if (!uploadRes.ok) throw Error(uploadJson.message)
-            let sqlRes = await fetch(`/api/${prefix}-restaurant-brand`, {
+            let sqlRes = await fetch(`/api/${prefix}-restaurant-brands`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -93,7 +93,7 @@ export const BrandLogin = () => {
             setSubmitting(false)
             let sqlJson = await sqlRes.json()
             if (!sqlRes.ok) throw Error(sqlJson.message)
-            Router.push(`/brands/${sqlJson.id}`)
+            Router.push(`/brand/${sqlJson.id}`)
         } catch (e) {
             throw Error(e.message)
         }

@@ -15,10 +15,10 @@ function Button({
       className={cn(
         'bg-black',
         'text-white',
-        'p-2',
+        'p-4',
         'rounded',
         'uppercase',
-        'text-sm',
+        'text-3xl',
         'font-bold',
         {
           [className]: Boolean(className),

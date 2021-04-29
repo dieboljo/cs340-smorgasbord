@@ -35,8 +35,8 @@ export const CustomerLogin = () => {
                 pathname: "/restaurants",
                 query: { customer: json.id },
             })
-        } catch (e) {
-            throw Error(e.message)
+        } catch (err) {
+            throw Error(err.message)
         }
     }
 
