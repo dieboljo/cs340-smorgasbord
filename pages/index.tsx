@@ -1,38 +1,23 @@
-import Skeleton from 'react-loading-skeleton'
+import Link from "next/link"
+import Layout from "@/components/layout"
 
-import Nav from '@/components/nav'
-import Container from '@/components/container'
-import Entries from '@/components/entries'
-
-import { useEntries } from '@/lib/swr-hooks'
-
-export default function IndexPage() {
-  const { entries, isLoading } = useEntries()
-
-  if (isLoading) {
-    return (
-      <div>
-        <Nav />
-        <Container>
-          <Skeleton width={180} height={24} />
-          <Skeleton height={48} />
-          <div className="my-4" />
-          <Skeleton width={180} height={24} />
-          <Skeleton height={48} />
-          <div className="my-4" />
-          <Skeleton width={180} height={24} />
-          <Skeleton height={48} />
-        </Container>
-      </div>
+export const IndexPage = () => {
+    return (   
+        <Layout home title='The Smorgasbord'>
+            <Link href='/login'>Login Page</Link>
+            <p>Allows user to login as a customer or a business.</p>
+            <Link href='/brand/244' as='/brand/taco%20town'>Brand Page</Link>
+            <p>Allows a business to view its restaurants.</p>
+            <Link href='/brand/location/255' as='/brand/location/taco%20town'>Location Page</Link>
+            <p>Allows a business to view and edit the menu of one restaurant location.</p>
+            <Link href='/restaurants?customerId=255'>Restaurants Page</Link>
+            <p>The customer's view of all listed restaurants to choose and order from.</p>
+            <Link href='/restaurants/menu/155?customerId=255' as='/restaurants/menu/taco%20town'>Menu Page</Link>
+            <p>The customer's view of one restaurant's menu, allows customer to select items and submit order.</p>
+            <Link href='/order/155'>Order Page</Link>
+            <p>An order confirmation and status page.</p>
+        </Layout>
     )
-  }
-
-  return (
-    <div>
-      <Nav />
-      <Container>
-        <Entries entries={entries} />
-      </Container>
-    </div>
-  )
 }
+
+export default IndexPage

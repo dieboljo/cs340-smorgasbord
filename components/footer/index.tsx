@@ -1,13 +1,15 @@
-import PoweredByVercel from '../powered-by-vercel'
+// components/footer/index.tsx
 
-function Footer() {
-  return (
-    <footer className="container mx-auto fixed bottom-0 right-0 left-0 flex justify-center items-center h-24">
-      <a href="https://vercel.com?utm_source=next-mysql">
-        <PoweredByVercel />
-      </a>
-    </footer>
-  )
+import cn from "classnames"
+import styles from "./footer.module.scss"
+import Link from "next/link"
+import React, { ReactNode } from "react"
+
+export const Footer = () => {
+    return (
+        <footer className={styles.footer}>
+        </footer>
+    )
 }
 
 export default Footer
