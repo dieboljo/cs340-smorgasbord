@@ -26,12 +26,21 @@ const handler: NextApiHandler = async (req, res) => {
 }
 
 const handlerSample: NextApiHandler = async (req, res) => {
-    const { name } = req.query
-    const results = {
-        brandId: 7777,
-        name: "Taco Town",
-        logo: "taco-town.png"
-    }
+    const { orderId } = req.query
+    const results = [
+        {
+            lineItemId: 259,
+            order: 577,
+            quantity: 4,
+            menuItem: 233,
+        },
+        {
+            lineItemId: 245,
+            order: 244,
+            quantity: 2,
+            menuItem: 155,
+        },
+    ]
     return res.json(results);
 }
 

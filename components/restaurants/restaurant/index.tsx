@@ -25,7 +25,10 @@ export const Restaurant = ({ id, name, logo, openTime, closeTime, address, isCus
     const customerView = (
         <div className="flex ml-4">
             <img src={`/logos/${logo}`} />
-            <Link href={`/restaurants/menu/${id}?customerId=${Router.query?.customerId}`}>
+            <Link 
+                href={`/restaurants/menu/${id}?customerId=${Router.query?.customerId}`}
+                as={`/restaurants/menu/${name}`}
+            >
                 <a className="font-bold py-2">{name}</a>
             </Link>
         </div>
@@ -36,6 +39,7 @@ export const Restaurant = ({ id, name, logo, openTime, closeTime, address, isCus
             <p className="font-bold py-2">{name}</p>
             <ButtonLink
                 href={`/brand/location/${id}`}
+                as={`/brand/location/${name}`}
                 className="h-5 py-0 mx-1"
             >
                 Edit

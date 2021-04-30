@@ -13,6 +13,7 @@ const convertCrumb = string => {
     .replace(/ae/g, 'ä')
     .replace(/ue/g, 'ü')
     .replace(/\?.*$/, '')
+    .replace(/\%20/, ' ')
     .toUpperCase();
 };
 

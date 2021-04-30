@@ -12,27 +12,19 @@ const handler: NextApiHandler = async (req, res) => {
     }
     const results = await query(
       `
-      SELECT id, title, content
-      FROM entries
+      DELETE FROM entries
       WHERE id = ?
-    `,
+  `,
       id
     )
-
-    return res.json(results[0])
+    res.json(results)
   } catch (e) {
     res.status(500).json({ message: e.message })
   }
 }
 
 const handlerSample: NextApiHandler = async (req, res) => {
-    const { name } = req.query
-    const results = {
-        brandId: 7777,
-        name: "Taco Town",
-        logo: "taco-town.png"
-    }
-    return res.json(results);
+    return res.json(true)
 }
 
 export default handlerSample

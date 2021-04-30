@@ -112,6 +112,47 @@ function useMenuItemsSample() {
     }
 }
 
+function useLineItemsSample(orderId) {
+    const data = [
+        {
+            lineItemId: 259,
+            quantity: 4,
+            menuItem: 233,
+            name: "Chicken quesadilla",
+            price: 2.35,
+        },
+        {
+            lineItemId: 245,
+            quantity: 2,
+            menuItem: 155,
+            name: "Tostada",
+            price: 1.99,
+        },
+    ]
+    const error = false
+    return {
+        lineItems: data,
+        isLoading: !error && !data,
+        isError: error,
+    }
+}
+
+function useOrderSample(orderId) {
+    const data = {
+        orderId: 155,
+        customer: "Ted Stevenson",
+        location: "Taco Town",
+        courier: "Craig",
+        status: "on the Way",
+    }
+    const error = false
+    return {
+        order: data,
+        isLoading: !error && !data,
+        isError: error,
+    }
+}
+
 export {
     useEntries,
     useEntry,
@@ -119,4 +160,6 @@ export {
     useLocationsSample as useLocations,
     useBrandSample as useBrand,
     useMenuItemsSample as useMenuItems,
+    useLineItemsSample as useLineItems,
+    useOrderSample as useOrder,
 }
