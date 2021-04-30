@@ -16,14 +16,3 @@
 	margin: auto;
 	text-align: center;
 }
-
-.toggle {
-	color: $color-link;
-	margin: 1rem auto;
-	text-align: center;
-	text-decoration: underline;
-	&:hover {
-		cursor: pointer;
-		text-decoration: none;
-	}
-}

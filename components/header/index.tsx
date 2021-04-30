@@ -12,6 +12,7 @@ const convertCrumb = string => {
     .replace(/oe/g, 'ö')
     .replace(/ae/g, 'ä')
     .replace(/ue/g, 'ü')
+    .replace(/\?.*$/, '')
     .toUpperCase();
 };
 
@@ -44,7 +45,7 @@ export const Header = (): JSX.Element => {
             </Link>
             {crumbs && crumbs.map((crumb, crumbIdx) => (
                 <Link href={crumb.href} key={crumb.href}>
-                    <a>{'/' + convertCrumb(crumb.breadCrumb)}</a>
+                    <a>{'/ ' + convertCrumb(crumb.breadCrumb)}</a>
                 </Link>
             ))}
         </header>

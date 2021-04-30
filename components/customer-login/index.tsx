@@ -1,5 +1,5 @@
 import { useState } from "react"
-import Router from "next/router"
+import { useRouter} from "next/router"
 
 import Button from "@/components/button"
 import styles from "./customer-login.module.scss"
@@ -9,19 +9,30 @@ export const CustomerLogin = () => {
     const [email, setEmail] = useState("")
     const [submitting, setSubmitting] = useState(false)
     const [register, toggleRegister] = useState(false)
+    const Router = useRouter()
     let buttonText = register ? "Register" : "Login";
     let toggleText = register ? "login" : "register";
 
     async function submitHandler(e) {
         setSubmitting(true)
         e.preventDefault()
-        let prefix = register ? "create" : "get";
         let data = { 
             email,
             name,
         }
         try {
-            const res = await fetch(`/api/${prefix}-customer`, {
+            if (register) {
+                let res = await fetch(`/api/create-customer`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                })
+                let json = await res.json()
+                if (!res.ok) throw Error(json.message)
+            }
+            let res = await fetch(`/api/get-customer`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -29,11 +40,11 @@ export const CustomerLogin = () => {
                 body: JSON.stringify(data),
             })
             setSubmitting(false)
-            const json = await res.json()
+            let json = await res.json()
             if (!res.ok) throw Error(json.message)
             Router.push({
                 pathname: "/restaurants",
-                query: { customer: json.id },
+                query: { customerId: json.customerId},
             })
         } catch (err) {
             throw Error(err.message)

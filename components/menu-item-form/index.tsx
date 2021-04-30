@@ -84,6 +84,11 @@ export const MenuItemForm = (props) => {
                     onChange={(e) => setDescription(e.target.value)}
                 />
             </div>
+            {props.id &&
+                <Button disabled={submitting} onClick={() => props.cancel()}>
+                    Cancel
+                </Button>
+            }
             <Button disabled={submitting} type="submit">
                 {submitting ? 'Creating ...' : 'Create'}
             </Button>
@@ -96,8 +101,8 @@ MenuItemForm.defaultProps = {
     name: '',
     description: '',
     price: 0.00,
-    customer: null,
     location: null,
+    cancel: null,
 }
 
 export default MenuItemForm

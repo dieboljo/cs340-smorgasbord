@@ -1,16 +1,16 @@
 import { useState } from "react"
-import Router from "next/router"
+import { useRouter } from "next/router"
 
 import Button from "@/components/button"
 import styles from "./brand-login.module.scss"
 
 export const BrandLogin = () => {
-    const [id, setId] = useState(0)
     const [name, setName] = useState("")
     const [logoFileName, setLogoFileName] = useState("")
     const [logoFile, setLogoFile] = useState("")
     const [submitting, setSubmitting] = useState(false)
     const [register, toggleRegister] = useState(false)
+    const Router = useRouter()
     let buttonText = register ? "Register" : "Login";
     let toggleText = register ? "login" : "register";
 
@@ -25,7 +25,7 @@ export const BrandLogin = () => {
     const registerFields = (
         <>
             <div className={styles.field}>
-                <label className={styles.label} htmlFor='name'>Name</label>
+                <label className={styles.label} htmlFor='name'>Brand Name</label>
                 <input
                     className={styles.input}
                     id='name'
@@ -50,14 +50,14 @@ export const BrandLogin = () => {
     )
     const loginFields = (
         <div className={styles.field}>
-            <label className={styles.label} htmlFor='id'>Business ID</label>
+            <label className={styles.label} htmlFor='name'>Brand Name</label>
             <input
                 className={styles.input}
-                id='id'
-                type='number'
-                name='id'
-                value={id}
-                onChange={(e) => setId(parseInt(e.target.value))}
+                id='name'
+                type='text'
+                name='name'
+                value={name}
+                onChange={(e) => setName(e.target.value)}
             />
         </div>
     )
@@ -65,35 +65,45 @@ export const BrandLogin = () => {
     async function submitHandler(e) {
         setSubmitting(true)
         e.preventDefault()
-        let prefix = register ? "create" : "get";
-        let sqlData = { 
-            id,
+        let data = { 
             name,
-            logoFileName
+            //logoFileName
+            logoFileName: 'taco-town.png'
         }
-        const formData = new FormData();
-        formData.set('logo', logoFile);
         try {
-            const uploadRes = await fetch('/api/upload', {
-                method: "POST",
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-                body: formData,
-            });
-            const uploadJson = await uploadRes.json()
-            if (!uploadRes.ok) throw Error(uploadJson.message)
-            let sqlRes = await fetch(`/api/${prefix}-restaurant-brands`, {
+            if (register) {
+                const formData = new FormData();
+                formData.set('logo', logoFile);
+                let res = await fetch('/api/upload', {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                    body: formData,
+                });
+                let json = await res.json()
+                if (!res.ok) throw Error(json.message)
+                res = await fetch(`/api/create-restaurant-brand`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                })
+                json = await res.json()
+                if (!res.ok) throw Error(json.message)
+            }
+            let res = await fetch(`/api/get-restaurant-brand`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(sqlData),
+                body: JSON.stringify(data),
             })
+            let json = await res.json()
+            if (!res.ok) throw Error(json.message)
             setSubmitting(false)
-            let sqlJson = await sqlRes.json()
-            if (!sqlRes.ok) throw Error(sqlJson.message)
-            Router.push(`/brand/${sqlJson.id}`)
+            Router.push(`/brand/${json.brandId}`)
         } catch (e) {
             throw Error(e.message)
         }

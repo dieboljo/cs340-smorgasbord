@@ -1,7 +1,7 @@
 import Restaurant from './restaurant';
 import styles from "./restaurants.module.scss"
 
-export const Restaurants = ({ restaurants, customer }) => {
+export const Restaurants = ({ restaurants, isCustomer }) => {
   if (restaurants) {
     return (
       <div className={styles.container}>
@@ -14,7 +14,7 @@ export const Restaurants = ({ restaurants, customer }) => {
                   openTime={restaurant.openTime} 
                   closeTime={restaurant.closeTime} 
                   address={restaurant.address} 
-                  customer={customer}
+                  isCustomer={isCustomer}
               />
           </div>
         ))}

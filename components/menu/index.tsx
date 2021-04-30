@@ -1,29 +1,30 @@
 import MenuItem from "./menu-item"
 import MenuItemForm from "@/components/menu-item-form"
+import styles from "./menu.module.scss"
 
-export const Menu = ({ menuItems, customer, location }) => {
+export const Menu = ({ menuItems, isCustomer, location, addToOrder }) => {
 
-    if (menuItems) {
-        return (
+    return (
+        <>
             <div>
-                {menuItems.map((menuItem) => (
-                    <div key={menuItem.menuItemId} className='py-2'>
+                {menuItems && menuItems.map((menuItem) => (
+                    <div key={menuItem.menuItemId} className={styles.item}>
                         <MenuItem 
                             id={menuItem.menuItemId} 
                             name={menuItem.name}
                             description={menuItem.description} 
                             price={menuItem.price}
-                            customer={customer}
+                            isCustomer={isCustomer}
                             location={location}
+                            addItem={addToOrder}
                         />
                     </div>
                 ))}
             </div>
-        )
-    }
-
-    return (
-        <MenuItemForm location={location} />
+            {!isCustomer &&
+                <MenuItemForm location={location} />
+            }
+        </>
     )
 }
 

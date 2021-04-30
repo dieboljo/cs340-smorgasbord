@@ -1,16 +1,20 @@
 import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 import Skeleton from "react-loading-skeleton"
 
 import Layout from "@/components/layout"
 import Restaurants from "@/components/restaurants"
-import { useRestaurants } from '@/lib/swr-hooks'
+import { useBrand, useLocations } from '@/lib/swr-hooks'
 
-export const RestaurantsPage = () => {
-    const { restaurants, isLoading } = useRestaurants();
+export const BrandPage = () => {
+    const Router = useRouter()
+    const brandId = Router.query?.brandId
+    const { locations, isLoading: locationsLoading } = useLocations();
+    const { brand, isLoading: brandLoading } = useBrand({ brandId });
 
-    if (isLoading) {
+    if (locationsLoading) {
         return (   
-            <Layout title='Our Partners'>
+            <Layout title='Your Locations'>
                 <Skeleton width={180} height={24} />
                 <Skeleton height={48} />
                 <div className="my-4" />
@@ -24,10 +28,12 @@ export const RestaurantsPage = () => {
     }
 
     return (
-        <Layout title='Our Partners'>
-            <Restaurants restaurants={restaurants} isCustomer={true} />
+        <Layout title='Your Locations'>
+            <img src={`/logos/${brand.logo}`} />
+            <h2>{brand.name}</h2>
+            <Restaurants restaurants={locations} isCustomer={false} />
         </Layout>
     )
 }
 
-export default RestaurantsPage
+export default BrandPage

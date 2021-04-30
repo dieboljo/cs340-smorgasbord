@@ -1,12 +1,14 @@
 import { useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/router"
 import { mutate } from "swr"
 
 import ButtonLink from "@/components/button-link"
 import Button from "@/components/button"
 import styles from "./restaurant.module.scss"
 
-export const Restaurant = ({ id, name, logo, openTime, closeTime, address, customer }) => {
+export const Restaurant = ({ id, name, logo, openTime, closeTime, address, isCustomer }) => {
+    const Router = useRouter()
     const [deleting, setDeleting] = useState(false)
 
     async function deleteRestaurant() {
@@ -23,7 +25,7 @@ export const Restaurant = ({ id, name, logo, openTime, closeTime, address, custo
     const customerView = (
         <div className="flex ml-4">
             <img src={`/logos/${logo}`} />
-            <Link href={`/restaurants/menu/${id}?customer=${customer}`}>
+            <Link href={`/restaurants/menu/${id}?customerId=${Router.query?.customerId}`}>
                 <a className="font-bold py-2">{name}</a>
             </Link>
         </div>
@@ -51,7 +53,7 @@ export const Restaurant = ({ id, name, logo, openTime, closeTime, address, custo
     return (
         <div>
             <div className="flex items-center">
-                {customer
+                {isCustomer
                     ? customerView
                     : brandView
                 }
