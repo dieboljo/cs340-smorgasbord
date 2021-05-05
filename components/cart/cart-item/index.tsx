@@ -10,6 +10,7 @@ export const CartItem = ({ id, quantity, menuItem, name, price }) => {
     const [newQuantity, setNewQuantity] = useState(quantity)
     const [removing, setRemoving] = useState(false)
     const [updating, setUpdating] = useState(false)
+    const totalPrice = (price * quantity).toFixed(2)
 
     const removeItem = async () => {
         setRemoving(true)
@@ -45,7 +46,7 @@ export const CartItem = ({ id, quantity, menuItem, name, price }) => {
     return (
         <div className={styles.row}>
             <div className={styles.name}>{name}</div>
-            <div className={styles.price}>{price}</div>
+            <div className={styles.price}>{totalPrice}</div>
             <div className={styles.field}>
                 <label className={styles.label} htmlFor="quantity">Qty</label>
                 <input 

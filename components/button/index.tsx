@@ -1,5 +1,7 @@
 import cn from 'clsx'
 
+import styles from './button.module.scss'
+
 function Button({
   onClick = console.log,
   className = '',
@@ -12,18 +14,7 @@ function Button({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={cn(
-        'bg-black',
-        'text-white',
-        'p-4',
-        'rounded',
-        'uppercase',
-        'text-3xl',
-        'font-bold',
-        {
-          [className]: Boolean(className),
-        }
-      )}
+      className={cn(styles.button, className)}
     >
       {children}
     </button>

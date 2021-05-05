@@ -18,8 +18,8 @@ function useEntry(id: string) {
     return useSWR(`/api/get-entry?id=${id}`, fetcher)
 }
 
-function useRestaurants() {
-    const { data, error } = useSWR(`/api/get-restaurants`, fetcher)
+function useRestaurants(filter) {
+    const { data, error } = useSWR(`/api/get-restaurants?filter=${filter}`, fetcher)
 
     return {
         restaurants: data,
@@ -28,7 +28,7 @@ function useRestaurants() {
     }
 }
 
-function useRestaurantsSample() {
+function useRestaurantsSample(filter) {
     const data = [
         {
             locationId: 34,

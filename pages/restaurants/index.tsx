@@ -1,12 +1,16 @@
 import { useRouter } from 'next/router'
+import { useState } from "react"
 import Skeleton from "react-loading-skeleton"
 
+import Button from "@/components/button"
+import Filter from "@/components/filter"
 import Layout from "@/components/layout"
 import Restaurants from "@/components/restaurants"
 import { useRestaurants } from '@/lib/swr-hooks'
 
 export const RestaurantsPage = () => {
-    const { restaurants, isLoading } = useRestaurants();
+    const [filterString, setFilterString] = useState('');
+    const { restaurants, isLoading } = useRestaurants(filterString);
 
     if (isLoading) {
         return (   
@@ -25,6 +29,7 @@ export const RestaurantsPage = () => {
 
     return (
         <Layout title='Our Partners'>
+            <Filter filterFunc={setFilterString} isLoading={isLoading} />
             <Restaurants restaurants={restaurants} isCustomer={true} />
         </Layout>
     )

@@ -11,12 +11,15 @@ export const LoginForm = () => {
     const [isBusiness, setIsBusiness] = useState(false)
     return (
         <div className={styles.loginContainer}>
-            <ToggleSwitch
-                left='Customer'
-                right='Brand'
-                onToggle={() => setIsBusiness(!isBusiness)}
-            />
-            {isBusiness ? <BrandLogin /> : <CustomerLogin />}
+            <div className={styles.loginForm}>
+                <h2 className={styles.heading}>Login / Register</h2>
+                <ToggleSwitch
+                    left='Customer'
+                    right='Restaurant'
+                    onToggle={() => setIsBusiness(!isBusiness)}
+                />
+                {isBusiness ? <BrandLogin /> : <CustomerLogin />}
+            </div>
             <CourierForm />
         </div>
     )

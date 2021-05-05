@@ -1,3 +1,4 @@
+import cn from "clsx"
 import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/router"
@@ -12,6 +13,8 @@ export const Restaurant = ({ id, name, logo, openTime, closeTime, address, isCus
     const [deleting, setDeleting] = useState(false)
     const customer = Router.query?.customerId
     const location = Router.query?.locationId
+    const openString = openTime < 12 ? openTime + 'am' : (openTime % 12) + 'pm';
+    const closeString = closeTime < 12 ? closeTime + 'am' : (closeTime % 12) + 'pm';
 
     async function deleteRestaurant() {
         setDeleting(true)
@@ -24,48 +27,60 @@ export const Restaurant = ({ id, name, logo, openTime, closeTime, address, isCus
         setDeleting(false)
     }
 
+    function editRestaurant() {
+        Router.push({
+            pathname: '/brand/location/',
+            query: `?locationId=${id}`,
+            }, '/brand/location/'
+        )
+    }
+
+
     const customerView = (
-        <div className="flex ml-4">
-            <img src={`/logos/${logo}`} />
-            <Link 
-                href={`/restaurants/menu/?customerId=${customer}&locationId=${location}`}
-                as={`/restaurants/menu/`}
-            >
-                <a className="font-bold py-2">{name}</a>
-            </Link>
+        <div className={cn(styles.row, styles.customerRow)}>
+            <div className={styles.name}>
+                <img src={`/logos/${logo}`} />
+                <Link 
+                    href={`/restaurants/menu/?customerId=${customer}&locationId=${location}`}
+                    as={`/restaurants/menu/`}
+                >
+                    <a>{name}</a>
+                </Link>
+            </div>
+            <p className={styles.hours}>{`${openString} - ${closeString}`}</p>
+            <p className={styles.address}>{address}</p>
         </div>
     )
 
     const brandView = (
-        <div className="flex ml-4">
-            <p className="font-bold py-2">{name}</p>
-            <ButtonLink
-                href={`/brand/location/?locationId=${id}`}
-                as={`/brand/location/`}
-                className="h-5 py-0 mx-1"
-            >
-                Edit
-            </ButtonLink>
-            <Button
-                disabled={deleting}
-                onClick={deleteRestaurant}
-                className="h-5 py-0 mx-1"
-            >
-                {deleting ? 'Deleting ...' : 'Delete'}
-            </Button>
+        <div className={cn(styles.row, styles.brandRow)}> 
+            <p className={styles.name}>{name}</p>
+            <p className={styles.hours}>{`${openString} - ${closeString}`}</p>
+            <p className={styles.address}>{address}</p>
+            <div className={styles.actions}>
+                <Button
+                    onClick={editRestaurant}
+                    className={styles.button}
+                >
+                    Edit
+                </Button>
+                <Button
+                    disabled={deleting}
+                    onClick={deleteRestaurant}
+                    className={styles.button}
+                >
+                    {deleting ? 'Deleting ...' : 'Delete'}
+                </Button>
+            </div>
         </div>
     )
 
     return (
         <div>
-            <div className="flex items-center">
-                {isCustomer
-                    ? customerView
-                    : brandView
-                }
-                <p>{`${openTime} - ${closeTime}`}</p>
-                <p>{address}</p>
-            </div>
+            {isCustomer
+                ? customerView
+                : brandView
+            }
         </div>
     )
 }
