@@ -10,6 +10,8 @@ import styles from "./restaurant.module.scss"
 export const Restaurant = ({ id, name, logo, openTime, closeTime, address, isCustomer }) => {
     const Router = useRouter()
     const [deleting, setDeleting] = useState(false)
+    const customer = Router.query?.customerId
+    const location = Router.query?.locationId
 
     async function deleteRestaurant() {
         setDeleting(true)
@@ -26,8 +28,8 @@ export const Restaurant = ({ id, name, logo, openTime, closeTime, address, isCus
         <div className="flex ml-4">
             <img src={`/logos/${logo}`} />
             <Link 
-                href={`/restaurants/menu/${id}?customerId=${Router.query?.customerId}`}
-                as={`/restaurants/menu/${name}`}
+                href={`/restaurants/menu/?customerId=${customer}&locationId=${location}`}
+                as={`/restaurants/menu/`}
             >
                 <a className="font-bold py-2">{name}</a>
             </Link>
@@ -38,8 +40,8 @@ export const Restaurant = ({ id, name, logo, openTime, closeTime, address, isCus
         <div className="flex ml-4">
             <p className="font-bold py-2">{name}</p>
             <ButtonLink
-                href={`/brand/location/${id}`}
-                as={`/brand/location/${name}`}
+                href={`/brand/location/?locationId=${id}`}
+                as={`/brand/location/`}
                 className="h-5 py-0 mx-1"
             >
                 Edit

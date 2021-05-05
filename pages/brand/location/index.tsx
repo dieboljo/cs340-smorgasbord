@@ -8,7 +8,7 @@ import { useBrand, useMenuItems } from '@/lib/swr-hooks'
 
 export const LocationPage = () => {
     const Router = useRouter()
-    const { brand, isLoading: brandLoading } = useBrand({ locationId: Router.query.locationId })
+    const { brand, isLoading: brandLoading } = useBrand({ locationId: Router.query?.locationId })
     const { menuItems, isLoading: menuItemsLoading } = useMenuItems();
 
     if (menuItemsLoading) {

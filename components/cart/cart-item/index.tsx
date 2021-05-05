@@ -6,17 +6,40 @@ import ButtonLink from '@/components/button-link'
 import Button from '@/components/button'
 import styles from "./cart-item.module.scss"
 
-export const CartItem = ({ id, quantity, menuItem, name, price, updateItem}) => {
+export const CartItem = ({ id, quantity, menuItem, name, price }) => {
     const [newQuantity, setNewQuantity] = useState(quantity)
-    const [deleting, setDeleting] = useState(false)
+    const [removing, setRemoving] = useState(false)
+    const [updating, setUpdating] = useState(false)
 
-    const deleteMenuItem = async () => {
-        setDeleting(true)
+    const removeItem = async () => {
+        setRemoving(true)
         let res = await fetch(`/api/delete-line-item?id=${id}`, { method: 'DELETE' })
         let json = await res.json()
         if (!res.ok) throw Error(json.message)
         mutate('/api/get-line-items')
-        setDeleting(false)
+        setRemoving(false)
+    }
+
+    const updateItem = async () => {
+        try {
+            setUpdating(true)
+            let data = {
+                lineItemId: id,
+                quantity: newQuantity,
+            }
+            let res = await fetch(`/api/edit-line-item`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            })
+            let json = await res.json()
+            if (!res.ok) throw Error(json.message)
+                setUpdating(false)
+        } catch (err) {
+            throw Error(err.message)
+        }
     }
 
     return (
@@ -30,12 +53,15 @@ export const CartItem = ({ id, quantity, menuItem, name, price, updateItem}) => 
                     className={styles.input}
                     type="number" 
                     min="0" 
-                    value={quantity}
+                    value={newQuantity}
                     onChange={(e) => setNewQuantity(parseInt(e.target.value))}
                 />
             </div>
-            <Button onClick={() => updateItem(id, newQuantity)}>
-                Update
+            <Button disabled={updating} onClick={() => updateItem()}>
+                {updating ? "Updating ..." : "Update"}
+            </Button>
+            <Button disabled={removing} onClick={() => removeItem()}>
+                {removing ? "Removing ..." : "Remove"}
             </Button>
         </div>
     )
