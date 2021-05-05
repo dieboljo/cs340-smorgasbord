@@ -103,7 +103,10 @@ export const BrandLogin = () => {
             let json = await res.json()
             if (!res.ok) throw Error(json.message)
             setSubmitting(false)
-            Router.push(`/brand/${json.brandId}`, `/brand/${json.name}`)
+        Router.push({
+            pathname: "/brand",
+            query: { brandId: json.brandId },
+        }, "/brand")
         } catch (e) {
             throw Error(e.message)
         }

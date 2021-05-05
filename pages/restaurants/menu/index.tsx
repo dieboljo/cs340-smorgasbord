@@ -2,7 +2,6 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import Skeleton from "react-loading-skeleton"
 
-import ButtonLink from "@/components/button-link"
 import Cart from "@/components/cart"
 import Layout from "@/components/layout"
 import Menu from "@/components/menu"
@@ -62,26 +61,6 @@ export const MenuPage = () => {
         }
     }
 
-    const updateOrder = async (lineItemId, quantity) => {
-        try {
-            let data = {
-                lineItemId,
-                quantity,
-            }
-            let res = await fetch(`/api/edit-line-item`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data),
-            })
-            let json = await res.json()
-            if (!res.ok) throw Error(json.message)
-        } catch (err) {
-            throw Error(err.message)
-        }
-    }
-
     if (menuItemsLoading) {
         return (   
             <Layout title={`Menu - ${brand.name}`}>
@@ -110,11 +89,8 @@ export const MenuPage = () => {
             <h3>Your Cart</h3>
             <Cart
                 cartItems={lineItems}
-                updateOrder={updateOrder}
+                order={orderId}
             />
-            <ButtonLink href={`/order/${orderId}`}>
-                Order
-            </ButtonLink>
         </Layout>
     )
 }

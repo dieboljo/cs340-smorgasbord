@@ -6,7 +6,7 @@ import { useOrder } from "@/lib/swr-hooks"
 
 export const OrderPage = () => {
     const Router = useRouter()
-    const orderId = Router.query.orderId
+    const orderId = Router.query?.orderId
     const { order, isLoading } = useOrder(orderId)
 
     if (isLoading) {

@@ -44,7 +44,7 @@ export const CustomerLogin = () => {
             if (!res.ok) throw Error(json.message)
             Router.push({
                 pathname: "/restaurants",
-                query: { customerId: json.customerId},
+                query: { customerId: json.customerId },
             })
         } catch (err) {
             throw Error(err.message)
@@ -54,10 +54,10 @@ export const CustomerLogin = () => {
     return (
         <form className={styles.form} onSubmit={submitHandler}>
             <div className={styles.field}>
-                <label className={styles.label} htmlFor='email'>Email</label>
+                <label className={styles.label} htmlFor='customer-email'>Email</label>
                 <input
                     className={styles.input}
-                    id='email'
+                    id='customer-email'
                     type='email'
                     name='email'
                     value={email}
@@ -66,10 +66,10 @@ export const CustomerLogin = () => {
             </div>
             {register && 
                 <div className={styles.field}>
-                    <label className={styles.label} htmlFor='name'>Name</label>
+                    <label className={styles.label} htmlFor='customer-name'>Name</label>
                     <input
                         className={styles.input}
-                        id='name'
+                        id='customer-name'
                         type='text'
                         name='name'
                         value={name}
