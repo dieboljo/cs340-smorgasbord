@@ -41,6 +41,13 @@ export const Cart = ({ cartItems, order }) => {
     if (cartItems) {
         return (
             <div className={styles.container}>
+                <h3 className={styles.heading}>Order #{order} Line Items</h3>
+                <div className={styles.row}>
+                    <p className={styles.cell}>Name</p>
+                    <p className={styles.cell}>Quantity</p>
+                    <p className={styles.cell}>Total Cost</p>
+                    <p className={styles.cell}>Actions</p>
+                </div>
                 {cartItems.map((cartItem) => (
                     <div key={cartItem.lineItemId} className='py-2'>
                         <CartItem
@@ -59,9 +66,11 @@ export const Cart = ({ cartItems, order }) => {
                         onToggle={() => setIsDelivery(!isDelivery)}
                     />
                 </div>
-                <Button disabled={ordering} onClick={() => orderSubmit()}>
-                    {ordering ? "Ordering ..." : "Order"}
-                </Button>
+                <div className={styles.submit}>
+                    <Button className={styles.button} disabled={ordering} onClick={() => orderSubmit()}>
+                        {ordering ? "Ordering ..." : "Order"}
+                    </Button>
+                </div>
             </div>
         )
     } else {

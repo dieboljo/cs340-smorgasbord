@@ -88,7 +88,6 @@ export const MenuPage = () => {
                 location={Router.query.locationId} 
                 addToOrder={addToOrder} 
             />
-            <h3>Your Cart</h3>
             <Cart
                 cartItems={lineItems}
                 order={orderId}

@@ -46,9 +46,8 @@ export const CartItem = ({ id, quantity, menuItem, name, price }) => {
     return (
         <div className={styles.row}>
             <div className={styles.name}>{name}</div>
-            <div className={styles.price}>{totalPrice}</div>
             <div className={styles.field}>
-                <label className={styles.label} htmlFor="quantity">Qty</label>
+                <label className={styles.label} htmlFor="quantity">Qty: </label>
                 <input 
                     id="quantity"
                     className={styles.input}
@@ -58,12 +57,15 @@ export const CartItem = ({ id, quantity, menuItem, name, price }) => {
                     onChange={(e) => setNewQuantity(parseInt(e.target.value))}
                 />
             </div>
-            <Button disabled={updating} onClick={() => updateItem()}>
-                {updating ? "Updating ..." : "Update"}
-            </Button>
-            <Button disabled={removing} onClick={() => removeItem()}>
-                {removing ? "Removing ..." : "Remove"}
-            </Button>
+            <div className={styles.price}>{totalPrice}</div>
+            <div>
+                <Button className={styles.button} disabled={updating} onClick={() => updateItem()}>
+                    {updating ? "Updating ..." : "Update"}
+                </Button>
+                <Button className={styles.button} disabled={removing} onClick={() => removeItem()}>
+                    {removing ? "Removing ..." : "Remove"}
+                </Button>
+            </div>
         </div>
     )
 }
