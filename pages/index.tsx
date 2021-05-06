@@ -4,18 +4,18 @@ import Layout from "@/components/layout"
 export const IndexPage = () => {
     return (   
         <Layout home title='The Smorgasbord'>
-            <Link href='/login'>Login Page</Link>
-            <p>Allows user to login as a customer or a business.</p>
-            <Link href='/brand/?brandId=244' as='/brand/'>Brand Page</Link>
-            <p>Allows a business to view its restaurants.</p>
-            <Link href='/brand/location/?locationId=255' as='/brand/location/'>Location Page</Link>
-            <p>Allows a business to view and edit the menu of one restaurant location.</p>
-            <Link href='/restaurants?customerId=255' as='/restaurants'>Restaurants Page</Link>
-            <p>The customer's view of all listed restaurants to choose and order from.</p>
-            <Link href='/restaurants/menu/?locationId=155&customerId=255' as='/restaurants/menu'>Menu Page</Link>
-            <p>The customer's view of one restaurant's menu, allows customer to select items and submit order.</p>
-            <Link href='/order/?orderId=155'>Order Page</Link>
-            <p>An order confirmation and status page.</p>
+            <Link href='/register'>RestaurantBrand / Customer / Courier Page</Link>
+            <p>Allows user to login or register as a Customer, Brand, or Courier.</p>
+            <Link href='/brands'>RestaurantBrands Page</Link>
+            <p>Lists all RestaurantBrands and their details.</p>
+            <Link href='/brands/locations'>RestaurantLocations Page</Link>
+            <p>Lists all RestaurantLocations of a brand and their details.</p>
+            <Link href='/brands/locations/menu-items'>MenuItems Page</Link>
+            <p>Lists MenuItems of a particular location, as selected from previous page, or all of them. Also allows for creation and editing of Orders.</p>
+            <Link href='/orders'>Orders Page</Link>
+            <p>Lists all orders, or orders for particular customer.</p>
+            <Link href='/orders/line-items'>LineItems Page</Link>
+            <p>Shows details for a particular order or all orders.</p>
         </Layout>
     )
 }

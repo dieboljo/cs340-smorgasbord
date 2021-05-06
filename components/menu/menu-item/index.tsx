@@ -12,7 +12,6 @@ export const MenuItem = ({
     name,
     description,
     price,
-    isCustomer,
     location,
     addItem,
 }) => {
@@ -31,39 +30,6 @@ export const MenuItem = ({
         setDeleting(false)
     }
 
-    const customerView = (
-        <div>
-            <div className={styles.field}>
-                <label className={styles.label} htmlFor='quantity'>
-                    Qty:
-                </label>
-                <input
-                    id='quantity'
-                    className={styles.input}
-                    type='number'
-                    min='0'
-                    value={quantity}
-                    onChange={(e) => setQuantity(parseInt(e.target.value))}
-                />
-                <Button className={styles.button} onClick={() => addItem(id, quantity)}>Add</Button>
-            </div>
-        </div>
-    )
-
-    const brandView = (
-        <div>
-            <Button
-                className={styles.button}
-                disabled={deleting}
-                onClick={() => setEditing(true)}>
-                Edit
-            </Button>
-            <Button className={styles.button} disabled={deleting} onClick={deleteMenuItem}>
-                {deleting ? "Deleting ..." : "Delete"}
-            </Button>
-        </div>
-    )
-
     if (editing) {
         return (
             <MenuItemForm
@@ -81,7 +47,29 @@ export const MenuItem = ({
                 <div className={styles.name}>{name}</div>
                 <div className={styles.price}>{price.toFixed(2)}</div>
                 <div className={styles.description}>{description}</div>
-                {isCustomer ? customerView : brandView}
+                <div className={styles.field}>
+                    <label className={styles.label} htmlFor='quantity'>
+                        Qty:
+                    </label>
+                    <input
+                        id='quantity'
+                        className={styles.input}
+                        type='number'
+                        min='0'
+                        value={quantity}
+                        onChange={(e) => setQuantity(parseInt(e.target.value))}
+                    />
+                    <Button className={styles.button} onClick={() => addItem(id, quantity)}>Add</Button>
+                    <Button
+                        className={styles.button}
+                        disabled={deleting}
+                        onClick={() => setEditing(true)}>
+                        Edit
+                    </Button>
+                    <Button className={styles.button} disabled={deleting} onClick={deleteMenuItem}>
+                        {deleting ? "Deleting ..." : "Delete"}
+                    </Button>
+                </div>
             </div>
         )
     }

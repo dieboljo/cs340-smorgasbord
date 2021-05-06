@@ -2,16 +2,17 @@ import { useRouter } from "next/router"
 import Skeleton from "react-loading-skeleton"
 
 import Layout from "@/components/layout"
-import { useOrder } from "@/lib/swr-hooks"
+import Orders from "@/components/orders"
+import { useOrders } from "@/lib/swr-hooks"
 
-export const OrderPage = () => {
+export const OrdersPage = () => {
     const Router = useRouter()
-    const orderId = Router.query?.orderId
-    const { order, isLoading } = useOrder(orderId)
+    const customerId = Router.query?.customerId || ''
+    const { orders, isLoading } = useOrders(customerId)
 
     if (isLoading) {
         return (   
-            <Layout title={`Order ${orderId}`}>
+            <Layout title='Orders'>
                 <Skeleton width={180} height={24} />
                 <Skeleton height={48} />
                 <div className="my-4" />
@@ -24,13 +25,10 @@ export const OrderPage = () => {
         )
     }
     return (   
-        <Layout title={`Order ${orderId}`}>
-            <h2>{`Order #${order.orderId} for ${order.customer}`}</h2>
-            <p>{`from ${order.location}`}</p>
-            <p>{`is ${order.status}`}</p>
-            <p>{`and will be delivered by ${order.courier}`}</p>
+        <Layout title='Orders'>
+            <Orders orders={orders} />
         </Layout>
     )
 }
 
-export default OrderPage
+export default OrdersPage

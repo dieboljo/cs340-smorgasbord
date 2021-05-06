@@ -43,9 +43,9 @@ export const CustomerLogin = () => {
             let json = await res.json()
             if (!res.ok) throw Error(json.message)
             Router.push({
-                pathname: "/restaurants",
+                pathname: "/brands",
                 query: { customerId: json.customerId },
-            })
+            }, '/brands')
         } catch (err) {
             throw Error(err.message)
         }

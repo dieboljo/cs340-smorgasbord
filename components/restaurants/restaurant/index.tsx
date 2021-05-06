@@ -4,15 +4,15 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import { mutate } from "swr"
 
-import ButtonLink from "@/components/button-link"
 import Button from "@/components/button"
+import RestaurantForm from "@/components/restaurant-form"
 import styles from "./restaurant.module.scss"
 
-export const Restaurant = ({ id, name, logo, openTime, closeTime, address, isCustomer }) => {
+export const Restaurant = ({ id, name, logo, openTime, closeTime, address }) => {
     const Router = useRouter()
     const [deleting, setDeleting] = useState(false)
-    const customer = Router.query?.customerId
-    const location = Router.query?.locationId
+    const [editing, setEditing] = useState(false)
+    const customer = Router.query?.customerId || ''
     const openString = openTime < 12 ? openTime + 'am' : (openTime % 12) + 'pm';
     const closeString = closeTime < 12 ? closeTime + 'am' : (closeTime % 12) + 'pm';
 
@@ -27,62 +27,50 @@ export const Restaurant = ({ id, name, logo, openTime, closeTime, address, isCus
         setDeleting(false)
     }
 
-    function editRestaurant() {
-        Router.push({
-            pathname: '/brand/location/',
-            query: `?locationId=${id}`,
-            }, '/brand/location/'
+    if (editing) {
+        return (
+            <RestaurantForm 
+                id={id}
+                name={name}
+                openTime={openTime}
+                closeTime={closeTime}
+                address={address}
+                cancel={() => setEditing(false)}
+            />
+        )
+    } else {
+        return (
+            <div className={styles.row}> 
+                <p className={styles.id}>{id}</p>
+                <div className={styles.name}>
+                    <img src={`/logos/${logo}`} />
+                    <Link 
+                        href={`/brands/locations/menu-items/?customerId=${customer}&locationId=${id}`}
+                        as={`/brands/locations/menu-items`}
+                    >
+                        <a>{name}</a>
+                    </Link>
+                </div>
+                <p className={styles.hours}>{`${openString} - ${closeString}`}</p>
+                <p className={styles.address}>{address}</p>
+                <div className={styles.actions}>
+                    <Button
+                        onClick={() => setEditing(true)}
+                        className={styles.button}
+                    >
+                        Edit
+                    </Button>
+                    <Button
+                        disabled={deleting}
+                        onClick={deleteRestaurant}
+                        className={styles.button}
+                    >
+                        {deleting ? 'Deleting ...' : 'Delete'}
+                    </Button>
+                </div>
+            </div>
         )
     }
-
-
-    const customerView = (
-        <div className={cn(styles.row, styles.customerRow)}>
-            <div className={styles.name}>
-                <img src={`/logos/${logo}`} />
-                <Link 
-                    href={`/restaurants/menu/?customerId=${customer}&locationId=${location}`}
-                    as={`/restaurants/menu/`}
-                >
-                    <a>{name}</a>
-                </Link>
-            </div>
-            <p className={styles.hours}>{`${openString} - ${closeString}`}</p>
-            <p className={styles.address}>{address}</p>
-        </div>
-    )
-
-    const brandView = (
-        <div className={cn(styles.row, styles.brandRow)}> 
-            <p className={styles.name}>{name}</p>
-            <p className={styles.hours}>{`${openString} - ${closeString}`}</p>
-            <p className={styles.address}>{address}</p>
-            <div className={styles.actions}>
-                <Button
-                    onClick={editRestaurant}
-                    className={styles.button}
-                >
-                    Edit
-                </Button>
-                <Button
-                    disabled={deleting}
-                    onClick={deleteRestaurant}
-                    className={styles.button}
-                >
-                    {deleting ? 'Deleting ...' : 'Delete'}
-                </Button>
-            </div>
-        </div>
-    )
-
-    return (
-        <div>
-            {isCustomer
-                ? customerView
-                : brandView
-            }
-        </div>
-    )
 }
 
 export default Restaurant

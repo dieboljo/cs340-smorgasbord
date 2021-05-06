@@ -2,7 +2,7 @@ import MenuItem from "./menu-item"
 import MenuItemForm from "@/components/menu-item-form"
 import styles from "./menu.module.scss"
 
-export const Menu = ({ menuItems, isCustomer, location, addToOrder }) => {
+export const Menu = ({ menuItems, location, addToOrder }) => {
 
     return (
         <>
@@ -20,16 +20,13 @@ export const Menu = ({ menuItems, isCustomer, location, addToOrder }) => {
                             name={menuItem.name}
                             description={menuItem.description} 
                             price={menuItem.price}
-                            isCustomer={isCustomer}
                             location={location}
                             addItem={addToOrder}
                         />
                     </div>
                 ))}
             </div>
-            {!isCustomer &&
-                <MenuItemForm location={location} />
-            }
+            <MenuItemForm location={location} />
         </>
     )
 }

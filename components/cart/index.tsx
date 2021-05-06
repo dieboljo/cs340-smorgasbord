@@ -30,9 +30,9 @@ export const Cart = ({ cartItems, order }) => {
             if (!res.ok) throw Error(json.message)
                 setOrdering(false)
             Router.push({
-                pathname: "/order",
+                pathname: "/orders/line-items",
                 query: { orderId: 154 },
-            })
+            }, "/orders/line-items")
         } catch (err) {
             throw Error(err.message)
         }

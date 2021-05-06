@@ -3,12 +3,13 @@ import { useState } from "react"
 import Button from "@/components/button"
 import styles from "./filter.module.scss"
 
-export const Filter = ({ filterFunc, isLoading }) => {
+export const Filter = ({ filterAttribute='', filterFunc, isLoading }) => {
     const [inputText, setInputText] = useState('');
+    const filterText = filterAttribute ? ` by ${filterAttribute}` : ''
 
     return (
             <div className={styles.filter}>
-                <label htmlFor='filter-input'>Filter Restaurants:</label>
+                <label htmlFor='filter-input'>Filter{filterText}:</label>
                 <input 
                     type='text' 
                     value={inputText} 
