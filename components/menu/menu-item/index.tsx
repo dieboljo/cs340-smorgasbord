@@ -20,14 +20,19 @@ export const MenuItem = ({
     const [editing, setEditing] = useState(false)
 
     const deleteMenuItem = async () => {
-        setDeleting(true)
-        let res = await fetch(`/api/delete-menu-item?id=${id}`, {
-            method: "DELETE",
-        })
-        let json = await res.json()
-        if (!res.ok) throw Error(json.message)
-        mutate("/api/get-menu-items")
-        setDeleting(false)
+        try {
+            setDeleting(true)
+            let res = await fetch(`/api/delete-menu-item?id=${id}`, {
+                method: "DELETE",
+            })
+            let json = await res.json()
+            if (!res.ok) throw Error(json.message)
+            mutate("/api/get-menu-items")
+        } catch(e) {
+            throw Error(e.message)
+        } finally {
+            setDeleting(false)
+        }
     }
 
     if (editing) {

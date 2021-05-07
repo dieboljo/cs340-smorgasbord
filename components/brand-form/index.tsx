@@ -33,9 +33,9 @@ export const BrandForm = () => {
             formData.set('logo', logoFile);
             let res = await fetch('/api/upload', {
                 method: "POST",
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
+                //headers: {
+                //"Content-Type": "multipart/form-data",
+                //},
                 body: formData,
             });
             let json = await res.json()
@@ -50,9 +50,10 @@ export const BrandForm = () => {
             json = await res.json()
             if (!res.ok) throw Error(json.message)
             mutate("/api/get-restaurant-brands")
-            setSubmitting(false)
         } catch (e) {
             throw Error(e.message)
+        } finally {
+            setSubmitting(false)
         }
     }
 

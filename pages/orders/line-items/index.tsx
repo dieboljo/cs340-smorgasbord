@@ -1,3 +1,4 @@
+import cn from "clsx"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import Skeleton from "react-loading-skeleton"
@@ -32,13 +33,14 @@ export const LineItemsPage = () => {
                 },
                 body: JSON.stringify(data),
             })
-            setCompleting(false)
             const json = await res.json()
             if (!res.ok) throw Error(json.message)
             mutate('/api/get-orders')
             mutate('/api/get-order')
         } catch (err) {
             throw Error(err.message)
+        } finally {
+            setCompleting(false)
         }
     }
 
@@ -60,13 +62,13 @@ export const LineItemsPage = () => {
         <Layout title={`Order #${orderId}`}>
             <div className='orderContainer'>
                 <h2>{`Order #${order.orderId}`}</h2>
-                <p className='font-bold text-4xl my-10'>{order.location}</p>
+                <p className={cn('font-bold', 'text-4xl', 'my-10')}>{order.location}</p>
                 <p>Status: <span className='font-bold'>{order.status}</span></p>
                 {order.courier &&
                     <p>Courier: <span className='font-bold'>{order.courier}</span></p>
                 }
             </div>
-            <div className='w-60 m-auto'>
+            <div className={cn('w-60', 'm-auto')}>
                 <Button disabled={completing} onClick={completeOrder}>
                     {completing ? "Working ..." : "Complete Order"}
                 </Button>

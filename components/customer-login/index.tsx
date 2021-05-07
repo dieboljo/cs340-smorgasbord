@@ -32,7 +32,6 @@ export const CustomerLogin = ({ setCustomer }) => {
                 })
                 let json = await res.json()
                 if (!res.ok) throw Error(json.message)
-                setSubmitting(false)
                 mutate("/api/get-customers")
             } else {
                 setCustomer(name)
@@ -40,6 +39,8 @@ export const CustomerLogin = ({ setCustomer }) => {
             }
         } catch (err) {
             throw Error(err.message)
+        } finally {
+            setSubmitting(false)
         }
     }
 

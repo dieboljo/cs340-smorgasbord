@@ -43,12 +43,13 @@ export const RestaurantForm = (props) => {
                 },
                 body: JSON.stringify(data),
             })
-            setSubmitting(false)
             const json = await res.json()
             if (!res.ok) throw Error(json.message)
             mutate('/api/get-restaurant-locations')
         } catch (err) {
             throw Error(err.message)
+        } finally {
+            setSubmitting(false)
         }
     }
 

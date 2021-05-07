@@ -13,12 +13,17 @@ export const CartItem = ({ id, quantity, menuItem, name, price }) => {
     const totalPrice = (price * quantity).toFixed(2)
 
     const removeItem = async () => {
-        setRemoving(true)
-        let res = await fetch(`/api/delete-line-item?id=${id}`, { method: 'DELETE' })
-        let json = await res.json()
-        if (!res.ok) throw Error(json.message)
-        mutate('/api/get-line-items')
-        setRemoving(false)
+        try {
+            setRemoving(true)
+            let res = await fetch(`/api/delete-line-item?id=${id}`, { method: 'DELETE' })
+            let json = await res.json()
+            if (!res.ok) throw Error(json.message)
+            mutate('/api/get-line-items')
+        } catch(e) {
+            throw Error(e.message)
+        } finally {
+            setRemoving(false)
+        }
     }
 
     const updateItem = async () => {

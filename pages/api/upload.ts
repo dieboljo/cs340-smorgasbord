@@ -1,32 +1,24 @@
-import nextConnect from 'next-connect';
-import multer from 'multer';
-
-const upload = multer({
-  storage: multer.diskStorage({
-    destination: 'public/logos',
-    filename: (req, file, cb) => cb(null, file.originalname),
-  }),
-});
-
-const apiRoute = nextConnect({
-  onError(error, req, res) {
-    res.status(501).json({ error: `Sorry something Happened! ${error.message}` });
-  },
-  onNoMatch(req, res) {
-    res.status(405).json({ error: `Method '${req.method}' Not Allowed` });
-  },
-});
-
-apiRoute.use(upload.single('logo'));
-
-apiRoute.post((req, res) => {
-  res.status(200).json({ data: 'success' });
-});
-
-export default apiRoute;
+import formidable from 'formidable';
 
 export const config = {
   api: {
-    bodyParser: false, // Disallow body parsing, consume as stream
+    bodyParser: false,
   },
+};
+
+export default async (req, res) => {
+    const form = new formidable.IncomingForm();
+    form.uploadDir = "public/logos";
+    form.keepExtensions = true;
+
+    form.on('error', (err) => {
+        res.status(501).json({ error:   'Formidable error.' });
+    })
+    .on('fileBegin', (name, file) => {
+        file.path = form.uploadDir + '/' + file.name;
+    })
+    .on('end', () => {
+        return res.status(200).json({ data: 'success'})
+    });
+   form.parse(req);
 };

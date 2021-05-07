@@ -42,12 +42,13 @@ export const MenuItemForm = (props) => {
                 },
                 body: JSON.stringify(data),
             })
-            setSubmitting(false)
             const json = await res.json()
             if (!res.ok) throw Error(json.message)
             mutate('/api/get-menu-items')
         } catch (err) {
             throw Error(err.message)
+        } finally {
+            setSubmitting(false)
         }
     }
 

@@ -17,14 +17,19 @@ export const Restaurant = ({ id, name, logo, openTime, closeTime, address }) => 
     const closeString = closeTime < 12 ? closeTime + 'am' : (closeTime % 12) + 'pm';
 
     async function deleteRestaurant() {
-        setDeleting(true)
-        let res = await fetch(`/api/delete-restaurant-location?id=${id}`, {
-            method: 'DELETE'
-        });
-        let json = await res.json()
-        if (!res.ok) throw Error(json.message)
-        mutate('/api/get-restaurant-locations')
-        setDeleting(false)
+        try {
+            setDeleting(true)
+            let res = await fetch(`/api/delete-restaurant-location?id=${id}`, {
+                method: 'DELETE'
+            });
+            let json = await res.json()
+            if (!res.ok) throw Error(json.message)
+            mutate('/api/get-restaurant-locations')
+        } catch(e) {
+            throw Error(e.message)
+        } finally {
+            setDeleting(false)
+        }
     }
 
     if (editing) {
