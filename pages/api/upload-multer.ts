@@ -1,5 +1,11 @@
+import type { NextApiRequest, NextApiResponse } from 'next';
+
 import nextConnect from 'next-connect';
 import multer from 'multer';
+
+type NextApiRequestWithFormData = NextApiRequest & {
+        files: any[],
+}
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -9,15 +15,15 @@ const upload = multer({
 });
 
 const apiRoute = nextConnect({
-  onError(error, req, res) {
+  onError(error, req: NextApiRequestWithFormData, res: NextApiResponse) {
     res.status(501).json({ error: `Sorry something Happened! ${error.message}` });
   },
-  onNoMatch(req, res) {
+  onNoMatch(req: NextApiRequestWithFormData, res: NextApiResponse) {
     res.status(405).json({ error: `Method '${req.method}' Not Allowed` });
   },
 });
 
-apiRoute.use(upload.single('logo')).post((req, res) => {
+apiRoute.use(upload.single('logo')).post((req, res: NextApiResponse) => {
   res.status(200).json({ data: 'success' });
 });
 
