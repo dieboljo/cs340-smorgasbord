@@ -17,7 +17,7 @@ export const Order = ({
     const detailsSubmit = () => {
         Router.push({
             pathname: '/orders/line-items',
-            query: { customerId: customer },
+            query: { orderId: id },
         }, '/orders/line-items')
     }
 

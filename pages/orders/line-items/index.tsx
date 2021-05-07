@@ -1,17 +1,50 @@
 import { useRouter } from "next/router"
+import { useState } from "react"
 import Skeleton from "react-loading-skeleton"
+import { mutate } from "swr"
 
+import Button from "@/components/button"
 import Layout from "@/components/layout"
-import { useOrder } from "@/lib/swr-hooks"
+import LineItems from "@/components/line-items"
+import { useLineItems, useOrder } from "@/lib/swr-hooks"
 
 export const LineItemsPage = () => {
+    const [completing, setCompleting] = useState(false)
     const Router = useRouter()
-    const orderId = Router.query?.orderId
-    const { order, isLoading } = useOrder(orderId)
+    const orderId = Array.isArray(Router.query?.orderId)
+        ? Router.query?.orderId[0]
+        : Router.query?.orderId || ""
+    const { order, isLoading: orderLoading } = useOrder({ orderId })
+    const { lineItems, isLoading: lineItemsLoading } = useLineItems(orderId)
 
-    if (isLoading) {
+    const completeOrder = async (e) => {
+        setCompleting(true)
+        e.preventDefault()
+        const data = {
+            orderId,
+            status: 'Complete',
+        }
+        try {
+            const res = await fetch(`/api/edit-order`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            })
+            setCompleting(false)
+            const json = await res.json()
+            if (!res.ok) throw Error(json.message)
+            mutate('/api/get-orders')
+            mutate('/api/get-order')
+        } catch (err) {
+            throw Error(err.message)
+        }
+    }
+
+    if (orderLoading) {
         return (   
-            <Layout title={`Order ${orderId}`}>
+            <Layout title={`Order #${orderId}`}>
                 <Skeleton width={180} height={24} />
                 <Skeleton height={48} />
                 <div className="my-4" />
@@ -24,11 +57,21 @@ export const LineItemsPage = () => {
         )
     }
     return (   
-        <Layout title={`Order ${orderId}`}>
-            <h2>{`Order #${order.orderId} for ${order.customer}`}</h2>
-            <p>{`from ${order.location}`}</p>
-            <p>{`is ${order.status}`}</p>
-            <p>{`and will be delivered by ${order.courier}`}</p>
+        <Layout title={`Order #${orderId}`}>
+            <div className='orderContainer'>
+                <h2>{`Order #${order.orderId}`}</h2>
+                <p className='font-bold text-4xl my-10'>{order.location}</p>
+                <p>Status: <span className='font-bold'>{order.status}</span></p>
+                {order.courier &&
+                    <p>Courier: <span className='font-bold'>{order.courier}</span></p>
+                }
+            </div>
+            <div className='w-60 m-auto'>
+                <Button disabled={completing} onClick={completeOrder}>
+                    {completing ? "Working ..." : "Complete Order"}
+                </Button>
+            </div>
+            <LineItems lineItems={lineItems} />
         </Layout>
     )
 }
