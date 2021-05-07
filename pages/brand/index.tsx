@@ -29,8 +29,10 @@ export const BrandPage = () => {
 
     return (
         <Layout title='Your Locations'>
-            <img src={`/logos/${brand.logo}`} />
-            <h2>{brand.name}</h2>
+            <div className='heading'>
+                <img className='logo' src={`/logos/${brand.logo}`} />
+                <h2 className='title'>{brand.name}</h2>
+            </div>
             <Restaurants restaurants={locations} isCustomer={false} />
         </Layout>
     )

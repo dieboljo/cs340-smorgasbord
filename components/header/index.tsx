@@ -18,11 +18,13 @@ const convertCrumb = string => {
 };
 
 export const Header = (): JSX.Element => {
-    const router = useRouter();
+    const Router = useRouter();
     const [crumbs, setCrumbs] = useState(null);
+    const customerId = Router.query.customerId || ''
+
     useEffect(() => {
-        if (router) {
-            const linkPath = router.asPath.split('/');
+        if (Router) {
+            const linkPath = Router.asPath.split('/');
             linkPath.shift();
 
             const pathArray = [];
@@ -37,18 +39,21 @@ export const Header = (): JSX.Element => {
 
             setCrumbs(pathArray);
         }
-    }, [router]);
+    }, [Router]);
 
     return (
         <header className={styles.header}>
             <Link href='/'>
-                <a>HOME</a>
+                <a className={styles.left}>HOME</a>
             </Link>
             {crumbs && crumbs.map((crumb, crumbIdx) => (
                 <Link href={crumb.href} key={crumb.href}>
                     <a>{'/ ' + convertCrumb(crumb.breadCrumb)}</a>
                 </Link>
             ))}
+            <Link href={`/orders?customerId=${customerId}`} as='/orders'>
+                <a className={styles.right}>ORDERS</a>
+            </Link>
         </header>
     )
 }

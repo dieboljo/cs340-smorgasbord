@@ -78,15 +78,16 @@ export const MenuPage = () => {
 
     return (
         <Layout title={`Menu - ${brand.name}`}>
-            <img src={`/logos/${brand.logo}`} />
-            <h2>{brand.name}</h2>
+            <div className='heading'>
+                <img className='logo' src={`/logos/${brand.logo}`} />
+                <h2 className='title'>{brand.name}</h2>
+            </div>
             <Menu 
                 menuItems={menuItems} 
                 isCustomer={true} 
                 location={Router.query.locationId} 
                 addToOrder={addToOrder} 
             />
-            <h3>Your Cart</h3>
             <Cart
                 cartItems={lineItems}
                 order={orderId}

@@ -1,73 +1,81 @@
+import cn from "clsx"
 import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { mutate } from "swr"
 
-import ButtonLink from "@/components/button-link"
 import Button from "@/components/button"
+import RestaurantForm from "@/components/restaurant-form"
 import styles from "./restaurant.module.scss"
 
-export const Restaurant = ({ id, name, logo, openTime, closeTime, address, isCustomer }) => {
+export const Restaurant = ({ id, name, logo, openTime, closeTime, address }) => {
     const Router = useRouter()
     const [deleting, setDeleting] = useState(false)
-    const customer = Router.query?.customerId
-    const location = Router.query?.locationId
+    const [editing, setEditing] = useState(false)
+    const customer = Router.query?.customerId || ''
+    const openString = openTime < 12 ? openTime + 'am' : (openTime % 12) + 'pm';
+    const closeString = closeTime < 12 ? closeTime + 'am' : (closeTime % 12) + 'pm';
 
     async function deleteRestaurant() {
-        setDeleting(true)
-        let res = await fetch(`/api/delete-restaurant-location?id=${id}`, {
-            method: 'DELETE'
-        });
-        let json = await res.json()
-        if (!res.ok) throw Error(json.message)
-        mutate('/api/get-restaurant-locations')
-        setDeleting(false)
+        try {
+            setDeleting(true)
+            let res = await fetch(`/api/delete-restaurant-location?id=${id}`, {
+                method: 'DELETE'
+            });
+            let json = await res.json()
+            if (!res.ok) throw Error(json.message)
+            mutate('/api/get-restaurant-locations')
+        } catch(e) {
+            throw Error(e.message)
+        } finally {
+            setDeleting(false)
+        }
     }
 
-    const customerView = (
-        <div className="flex ml-4">
-            <img src={`/logos/${logo}`} />
-            <Link 
-                href={`/restaurants/menu/?customerId=${customer}&locationId=${location}`}
-                as={`/restaurants/menu/`}
-            >
-                <a className="font-bold py-2">{name}</a>
-            </Link>
-        </div>
-    )
-
-    const brandView = (
-        <div className="flex ml-4">
-            <p className="font-bold py-2">{name}</p>
-            <ButtonLink
-                href={`/brand/location/?locationId=${id}`}
-                as={`/brand/location/`}
-                className="h-5 py-0 mx-1"
-            >
-                Edit
-            </ButtonLink>
-            <Button
-                disabled={deleting}
-                onClick={deleteRestaurant}
-                className="h-5 py-0 mx-1"
-            >
-                {deleting ? 'Deleting ...' : 'Delete'}
-            </Button>
-        </div>
-    )
-
-    return (
-        <div>
-            <div className="flex items-center">
-                {isCustomer
-                    ? customerView
-                    : brandView
-                }
-                <p>{`${openTime} - ${closeTime}`}</p>
-                <p>{address}</p>
+    if (editing) {
+        return (
+            <RestaurantForm 
+                id={id}
+                name={name}
+                openTime={openTime}
+                closeTime={closeTime}
+                address={address}
+                cancel={() => setEditing(false)}
+            />
+        )
+    } else {
+        return (
+            <div className={styles.row}> 
+                <p className={styles.id}>{id}</p>
+                <div className={styles.name}>
+                    <img src={`/logos/${logo}`} />
+                    <Link 
+                        href={`/brands/locations/menu-items/?customerId=${customer}&locationId=${id}`}
+                        as={`/brands/locations/menu-items`}
+                    >
+                        <a>{name}</a>
+                    </Link>
+                </div>
+                <p className={styles.hours}>{`${openString} - ${closeString}`}</p>
+                <p className={styles.address}>{address}</p>
+                <div className={styles.actions}>
+                    <Button
+                        onClick={() => setEditing(true)}
+                        className={styles.button}
+                    >
+                        Edit
+                    </Button>
+                    <Button
+                        disabled={deleting}
+                        onClick={deleteRestaurant}
+                        className={styles.button}
+                    >
+                        {deleting ? 'Deleting ...' : 'Delete'}
+                    </Button>
+                </div>
             </div>
-        </div>
-    )
+        )
+    }
 }
 
 export default Restaurant

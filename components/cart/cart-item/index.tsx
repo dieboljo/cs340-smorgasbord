@@ -10,14 +10,20 @@ export const CartItem = ({ id, quantity, menuItem, name, price }) => {
     const [newQuantity, setNewQuantity] = useState(quantity)
     const [removing, setRemoving] = useState(false)
     const [updating, setUpdating] = useState(false)
+    const totalPrice = (price * quantity).toFixed(2)
 
     const removeItem = async () => {
-        setRemoving(true)
-        let res = await fetch(`/api/delete-line-item?id=${id}`, { method: 'DELETE' })
-        let json = await res.json()
-        if (!res.ok) throw Error(json.message)
-        mutate('/api/get-line-items')
-        setRemoving(false)
+        try {
+            setRemoving(true)
+            let res = await fetch(`/api/delete-line-item?id=${id}`, { method: 'DELETE' })
+            let json = await res.json()
+            if (!res.ok) throw Error(json.message)
+            mutate('/api/get-line-items')
+        } catch(e) {
+            throw Error(e.message)
+        } finally {
+            setRemoving(false)
+        }
     }
 
     const updateItem = async () => {
@@ -45,9 +51,8 @@ export const CartItem = ({ id, quantity, menuItem, name, price }) => {
     return (
         <div className={styles.row}>
             <div className={styles.name}>{name}</div>
-            <div className={styles.price}>{price}</div>
             <div className={styles.field}>
-                <label className={styles.label} htmlFor="quantity">Qty</label>
+                <label className={styles.label} htmlFor="quantity">Qty: </label>
                 <input 
                     id="quantity"
                     className={styles.input}
@@ -57,12 +62,15 @@ export const CartItem = ({ id, quantity, menuItem, name, price }) => {
                     onChange={(e) => setNewQuantity(parseInt(e.target.value))}
                 />
             </div>
-            <Button disabled={updating} onClick={() => updateItem()}>
-                {updating ? "Updating ..." : "Update"}
-            </Button>
-            <Button disabled={removing} onClick={() => removeItem()}>
-                {removing ? "Removing ..." : "Remove"}
-            </Button>
+            <div className={styles.price}>{totalPrice}</div>
+            <div>
+                <Button className={styles.button} disabled={updating} onClick={() => updateItem()}>
+                    {updating ? "Updating ..." : "Update"}
+                </Button>
+                <Button className={styles.button} disabled={removing} onClick={() => removeItem()}>
+                    {removing ? "Removing ..." : "Remove"}
+                </Button>
+            </div>
         </div>
     )
 }

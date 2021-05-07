@@ -1,3 +1,4 @@
+import cn from "clsx"
 import { useState } from 'react'
 import Router from 'next/router'
 import { mutate } from "swr"
@@ -41,57 +42,60 @@ export const MenuItemForm = (props) => {
                 },
                 body: JSON.stringify(data),
             })
-            setSubmitting(false)
             const json = await res.json()
             if (!res.ok) throw Error(json.message)
             mutate('/api/get-menu-items')
         } catch (err) {
             throw Error(err.message)
+        } finally {
+            setSubmitting(false)
         }
     }
 
     return (
-        <form onSubmit={submitHandler}>
+        <form className={styles.row} onSubmit={submitHandler}>
             <div className={styles.field}>
-                <label className={styles.label} htmlFor="name">Name</label>
                 <input
                     id="name"
-                    className={styles.input}
+                    className={cn(styles.input, styles.name)}
                     type="text"
                     name="name"
                     value={name}
+                    placeholder="Name"
                     onChange={(e) => setName(e.target.value)}
                 />
             </div>
             <div className={styles.field}>
-                <label className={styles.label} htmlFor="price">Price</label>
                 <input
                     id="price"
-                    className={styles.input}
+                    className={cn(styles.input, styles.price)}
                     type="number"
                     step="0.01"
                     value={price}
+                    placeholder="Price"
                     onChange={(e) => setPrice(parseFloat(e.target.value))}
                 />
             </div>
             <div className={styles.field}>
-                <label className={styles.label} htmlFor="description">Description</label>
                 <textarea
-                    className={styles.input}
+                    className={cn(styles.input, styles.description)}
                     id="description"
                     name="description"
                     value={description}
+                    placeholder="Description"
                     onChange={(e) => setDescription(e.target.value)}
                 />
             </div>
+            <div>
             {props.id &&
-                <Button disabled={submitting} onClick={() => props.cancel()}>
+                <Button className={styles.button} disabled={submitting} onClick={() => props.cancel()}>
                     Cancel
                 </Button>
             }
-            <Button disabled={submitting} type="submit">
+            <Button className={styles.button} disabled={submitting} type="submit">
                 {submitting ? 'Creating ...' : 'Create'}
             </Button>
+            </div>
         </form>
     )
 }

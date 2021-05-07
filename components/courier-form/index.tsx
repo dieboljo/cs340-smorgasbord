@@ -26,9 +26,10 @@ export const CourierForm = () => {
             })
             let json = await res.json()
             if (!res.ok) throw Error(json.message)
-            setSubmitting(false)
         } catch (err) {
             throw Error(err.message)
+        } finally {
+            setSubmitting(false)
         }
     }
 
