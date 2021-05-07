@@ -37,12 +37,11 @@ const handlerSample: NextApiHandler = async (req, res) => {
     ]
     const error = false
 
-    return {
+    return res.json({
         menuItems: results,
         isLoading: !error && !results,
         isError: error,
-    }
-    return res.json(results);
+    })
 }
 
 export default handlerSample
