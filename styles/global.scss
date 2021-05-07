@@ -28,6 +28,14 @@ img {
 	display: block;
 }
 
+.loginContainer {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	margin: 10rem auto;
+	width: 100%;
+}
+
 .logo {
 	border-radius: 50%;
 	height: 100px;

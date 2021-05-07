@@ -31,6 +31,33 @@ function useBrandsSample(filter) {
     }
 }
 
+function useCustomers(filter) {
+    const { data, error } = useSWR(`/api/get-customers?filter=${filter}`, fetcher)
+
+    return {
+        brands: data,
+        isLoading: !error && !data,
+        isError: error,
+    }
+}
+
+function useCustomersSample(filter) {
+    const data = [
+        {
+            customerId: 443,
+            name: "Patty O'Malley",
+            email: "patty@oshaunesseys.com",
+        },
+    ]
+    const error = false
+
+    return {
+        customers: data,
+        isLoading: !error && !data,
+        isError: error,
+    }
+}
+
 function useEntries() {
     const { data, error } = useSWR(`/api/get-entries`, fetcher)
 
@@ -211,6 +238,7 @@ const  useOrdersSample = (filter) => {
 export {
     useEntries,
     useEntry,
+    useCustomersSample as useCustomers,
     useRestaurantsSample as useRestaurants,
     useLocationsSample as useLocations,
     useBrandSample as useBrand,

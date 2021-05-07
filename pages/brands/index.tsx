@@ -2,6 +2,7 @@ import { useRouter } from 'next/router'
 import { useState } from "react"
 import Skeleton from "react-loading-skeleton"
 
+import BrandForm from "@/components/brand-form"
 import Filter from "@/components/filter"
 import Layout from "@/components/layout"
 import Brands from "@/components/brands"
@@ -32,6 +33,7 @@ export const BrandsPage = () => {
                 <h2 className='title'>Restaurant Brands</h2>
             </div>
             <Filter filterAttribute='Brand Name' filterFunc={setFilterString} isLoading={isLoading} />
+            <BrandForm />
             <Brands brands={brands} />
         </Layout>
     )
