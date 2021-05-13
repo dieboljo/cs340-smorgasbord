@@ -30,7 +30,7 @@ CREATE TABLE `RestaurantLocations` (
 --Table for 'MenuItems' 
 CREATE TABLE `MenuItems` (
     `menuItemId` int NOT NULL AUTO_INCREMENT UNIQUE, 
-    `name` varchar(150), 
+    `name` varchar(150) NOT NULL, 
     `description` varchar(150), 
     `price` decimal(5, 2) NOT NULL, 
     `location` int NOT NULL 
@@ -50,7 +50,7 @@ CREATE TABLE `Couriers` (
 CREATE TABLE `Customers` (
     `customerId` int NOT NULL AUTO_INCREMENT UNIQUE, 
     `name` varchar(30), 
-    `email` varchar(30) NOT NULL,
+    `email` varchar(30) NOT NULL UNIQUE,
     PRIMARY KEY(`customerId`)
 )
 
@@ -59,7 +59,7 @@ CREATE TABLE `Orders` (
     `orderId` int NOT NULL AUTO_INCREMENT UNIQUE, 
     `customer` int NOT NULL, 
     `location` int NOT NULL, 
-    `courier` int NOT NULL, 
+    `courier` int, 
     `status` varchar(10) NOT NULL, 
     PRIMARY KEY(`orderId`), 
     CONSTRAINT `customer_fk` FOREIGN KEY (`customer`) REFERENCES `Customers` (`customerId`), 
