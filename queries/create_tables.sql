@@ -14,7 +14,7 @@ CREATE TABLE `RestaurantBrands` (
     `name` varchar(30) NOT NULL, 
     `logo` varchar(100),
     PRIMARY KEY(`brandId`)
-)
+);
 
 --Table for 'RestaurantLocations'
 CREATE TABLE `RestaurantLocations` (
@@ -25,7 +25,7 @@ CREATE TABLE `RestaurantLocations` (
     `address` varchar(50) NOT NULL, 
     PRIMARY KEY(`locationId`)
     CONSTRAINT `brand_fk` FOREIGN KEY(`brand`) REFERENCES `RestaurantBrands` (`brandId`)
-)
+);
 
 --Table for 'MenuItems' 
 CREATE TABLE `MenuItems` (
@@ -36,7 +36,7 @@ CREATE TABLE `MenuItems` (
     `location` int NOT NULL 
     PRIMARY KEY(`menuItemId`), 
     CONSTRAINT `location_fk` FOREIGN KEY (`location`) REFERENCES `RestaurantLocations` (`locationId`) 
-)
+);
 
 --Table for 'Couriers' 
 CREATE TABLE `Couriers` (
@@ -44,7 +44,7 @@ CREATE TABLE `Couriers` (
     `name` varchar(30), 
     `email` varchar(30) NOT NULL
     PRIMARY KEY(`courierId`)
-)
+);
 
 --Table for 'Customers' 
 CREATE TABLE `Customers` (
@@ -52,7 +52,7 @@ CREATE TABLE `Customers` (
     `name` varchar(30), 
     `email` varchar(30) NOT NULL UNIQUE,
     PRIMARY KEY(`customerId`)
-)
+);
 
 --Table for Orders 
 CREATE TABLE `Orders` (
@@ -65,7 +65,7 @@ CREATE TABLE `Orders` (
     CONSTRAINT `customer_fk` FOREIGN KEY (`customer`) REFERENCES `Customers` (`customerId`), 
     CONSTRAINT `location_fk` FOREIGN KEY (`location`) REFERENCES `RestaurantLocations` (`locationId`), 
     CONSTRAINT `courier_fk` FOREIGN KEY (`courier`) REFERENCES `Couriers` (`courierId`)
-)
+);
 
 
 --Table for 'LineItems' 
