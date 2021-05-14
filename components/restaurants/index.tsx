@@ -18,6 +18,7 @@ export const Restaurants = ({ restaurants }) => {
                 <div key={restaurant.locationId} className="py-2">
                     <Restaurant 
                         id={restaurant.locationId} 
+                        brandId={restaurant.brandId}
                         name={restaurant.name}
                         logo={restaurant.logo}
                         openTime={restaurant.openTime} 

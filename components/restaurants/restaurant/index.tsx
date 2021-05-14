@@ -8,7 +8,7 @@ import Button from "@/components/button"
 import RestaurantForm from "@/components/restaurant-form"
 import styles from "./restaurant.module.scss"
 
-export const Restaurant = ({ id, name, logo, openTime, closeTime, address }) => {
+export const Restaurant = ({ id, brandId, name, logo, openTime, closeTime, address }) => {
     const Router = useRouter()
     const [deleting, setDeleting] = useState(false)
     const [editing, setEditing] = useState(false)
@@ -36,7 +36,7 @@ export const Restaurant = ({ id, name, logo, openTime, closeTime, address }) => 
         return (
             <RestaurantForm 
                 id={id}
-                name={name}
+                brandId={brandId}
                 openTime={openTime}
                 closeTime={closeTime}
                 address={address}

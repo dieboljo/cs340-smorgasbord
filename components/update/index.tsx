@@ -3,8 +3,13 @@ import { useState } from "react"
 import Button from "@/components/button"
 import styles from "./update.module.scss"
 
-export const Update = ({ label='', placeholder='', updateFunc, isLoading }) => {
+export const Update = ({ label='', placeholder='', updateFunc, isLoading, value='' }) => {
     const [inputText, setInputText] = useState('');
+
+    const submitFunc = () => {
+        updateFunc(inputText);
+        setInputText('');
+    }
 
     return (
             <div className={styles.update}>
@@ -16,7 +21,7 @@ export const Update = ({ label='', placeholder='', updateFunc, isLoading }) => {
                     onChange={(e) => setInputText(e.target.value)}
                     id='update-input'
                 />
-                <Button disabled={isLoading} className={styles.button} onClick={() => updateFunc(inputText)}>
+                <Button disabled={isLoading} className={styles.button} onClick={submitFunc}>
                     {isLoading ? "Updating ..." : "Update"}
                 </Button>
             </div>

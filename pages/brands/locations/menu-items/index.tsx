@@ -75,11 +75,13 @@ export const MenuPage = () => {
                 label='Customer ID'
                 updateFunc={setCustomerId}
                 isLoading={orderLoading}
+                placeholder={customerId}
             />
             <Update
                 label='Location ID'
                 updateFunc={setLocationId}
                 isLoading={orderLoading}
+                placeholder={locationId}
             />
             </div>
             <Menu 
