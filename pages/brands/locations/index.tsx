@@ -40,7 +40,7 @@ export const LocationsPage = () => {
                 <h2 className='title'>Restaurant Locations</h2>
             </div>
             <Filter
-                filterAttribute='Brand Name'
+                filterAttribute='Brand ID'
                 filterFunc={setFilterString}
                 isLoading={isLoading}
             />

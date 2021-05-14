@@ -7,7 +7,7 @@ import Button from '@/components/button'
 import styles from "./restaurant-form.module.scss"
 
 interface RestaurantData {
-    name: string,
+    brandId: number,
     openTime: string,
     closeTime: string,
     address: string,
@@ -15,7 +15,7 @@ interface RestaurantData {
 }
 
 export const RestaurantForm = (props) => {
-    const [name, setName] = useState(props.name)
+    const [brandId, setBrandId] = useState(props.brandId)
     const [address, setAddress] = useState(props.address)
     const [openTime, setOpenTime] = useState(props.openTime)
     const [closeTime, setCloseTime] = useState(props.closeTime)
@@ -25,7 +25,7 @@ export const RestaurantForm = (props) => {
         setSubmitting(true)
         e.preventDefault()
         const data: RestaurantData = {
-            name,
+            brandId,
             openTime,
             closeTime,
             address,
@@ -58,13 +58,13 @@ export const RestaurantForm = (props) => {
             <p>{props.id || ''}</p>
             <div className={styles.field}>
                 <input
-                    id="name"
+                    id="brandId"
                     className={cn(styles.input, styles.name)}
                     type="text"
-                    name="name"
-                    value={name}
-                    placeholder="Brand Name"
-                    onChange={(e) => setName(e.target.value)}
+                    name="brandId"
+                    value={brandId}
+                    placeholder="Brand ID"
+                    onChange={(e) => setBrandId(e.target.value)}
                 />
             </div>
             <div>

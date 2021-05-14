@@ -116,6 +116,7 @@ function useLocationsSample({ brandId='', filter='' } = {}) {
     const data = [
         {
             locationId: 34,
+            brandId: 4444,
             name: "Taco Town",
             logo: "taco-town.png",
             openTime: 9.0,
