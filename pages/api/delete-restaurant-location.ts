@@ -11,10 +11,7 @@ const handler: NextApiHandler = async (req, res) => {
       return res.status(400).json({ message: '`id` must be a number' })
     }
     const results = await query(
-      `
-      DELETE FROM entries
-      WHERE id = ?
-  `,
+    DELETE FROM RestaurantLocations WHERE locationId = $locationId, 
       id
     )
     res.json(results)
