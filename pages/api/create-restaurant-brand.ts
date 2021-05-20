@@ -14,10 +14,8 @@ const handler: NextApiHandler = async (req, res) => {
     }
 
     const results = await query(
-      `
-      INSERT INTO entries (title, content)
-      VALUES (?, ?)
-      `,
+     INSERT INTO RestaurantBrands (name, logo) 
+      VALUES ($brandName, $logoFileName), 
       [filter.clean(name), filter.clean(email)]
     )
 
