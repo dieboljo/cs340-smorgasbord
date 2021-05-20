@@ -14,10 +14,7 @@ const handler: NextApiHandler = async (req, res) => {
     }
 
     const results = await query(
-      `
-      INSERT INTO entries (title, content)
-      VALUES (?, ?)
-      `,
+      UPDATE Orders SET courier = $courierId, status = $newStatus WHERE orderId = $orderId, 
       [filter.clean(name), filter.clean(email)]
     )
 
