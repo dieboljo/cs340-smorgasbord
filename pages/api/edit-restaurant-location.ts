@@ -14,10 +14,9 @@ const handler: NextApiHandler = async (req, res) => {
     }
 
     const results = await query(
-      `
-      INSERT INTO entries (title, content)
-      VALUES (?, ?)
-      `,
+     UPDATE RestaurantLocations 
+      SET brandId = $newBrandId, openTime = $newOpenTime, closeTime = $newCloseTime, address = $newAddress 
+      WHERE locationId = $locationid,
       [filter.clean(name), filter.clean(email)]
     )
 
