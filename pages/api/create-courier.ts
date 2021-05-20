@@ -15,7 +15,7 @@ const handler: NextApiHandler = async (req, res) => {
 
     const results = await query(
       `
-      INSERT INTO entries (title, content)
+      INSERT INTO Couriers (name, email)
       VALUES (?, ?)
       `,
       [filter.clean(name), filter.clean(email)]
@@ -31,4 +31,4 @@ const handlerSample: NextApiHandler = async (req, res) => {
     return res.json(true)
 }
 
-export default handlerSample
+export default handler
