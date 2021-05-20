@@ -13,11 +13,8 @@ export const LocationsPage = () => {
         ? Router.query?.brandId[0]
         : Router.query?.brandId || ""
     const customerId = Router.query?.customerId || ""
-    const [filterString, setFilterString] = useState("")
-    const { locations, isLoading } = useLocations({
-        brandId,
-        filter: filterString,
-    })
+    const [filterString, setFilterString] = useState(brandId)
+    const { locations, isLoading } = useLocations(filterString)
 
     if (isLoading) {
         return (

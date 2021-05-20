@@ -1,11 +1,12 @@
+import { useEffect, useState } from "react"
 import useSWR from "swr"
 
 function fetcher(url: string) {
     return window.fetch(url).then((res) => res.json())
 }
 
-function useBrands(filter) {
-    const { data, error } = useSWR(`/api/get-brands?filter=${filter}`, fetcher)
+const useBrands = (name='') => {
+    const { data, error } = useSWR(`/api/get-brands?name=${name}`, fetcher)
 
     return {
         brands: data,
@@ -31,11 +32,11 @@ function useBrandsSample(filter) {
     }
 }
 
-function useCustomers(filter) {
-    const { data, error } = useSWR(`/api/get-customers?filter=${filter}`, fetcher)
+function useCustomers(email='') {
+    const { data, error } = useSWR(`/api/get-customers?email=${email}`, fetcher)
 
     return {
-        brands: data,
+        customers: data,
         isLoading: !error && !data,
         isError: error,
     }
@@ -102,8 +103,8 @@ function useRestaurantsSample(filter) {
     }
 }
 
-function useLocations({ brandId='', filter='' } = {}) {
-    const { data, error } = useSWR(`/api/get-restaurant-locations`, fetcher)
+function useLocations(brandId='') {
+    const { data, error } = useSWR(`/api/get-restaurant-locations?brandId=${brandId}`, fetcher)
 
     return {
         locations: data,
@@ -148,7 +149,17 @@ function useBrandSample({ brandId=null, name='', locationId=null } = {}) {
     }
 }
 
-function useMenuItemsSample(locationId) {
+const useMenuItems = (locationId='') => {
+    const { data, error } = useSWR(`/api/get-menu-items?locationId=${locationId}`, fetcher)
+
+    return {
+        menuItems: data,
+        isLoading: !error && !data,
+        isError: error,
+    }
+}
+
+function useMenuItemsSample(locationId='') {
     const data = [
         {
             menuItemId: 43,
@@ -162,6 +173,16 @@ function useMenuItemsSample(locationId) {
 
     return {
         menuItems: data,
+        isLoading: !error && !data,
+        isError: error,
+    }
+}
+
+const useLineItems = (orderId='') => {
+    const { data, error } = useSWR(`/api/get-line-items?orderId=${orderId}`, fetcher)
+
+    return {
+        lineItems: data,
         isLoading: !error && !data,
         isError: error,
     }
@@ -213,6 +234,85 @@ const  useOrderSample = ({ orderId='', customerId='', locationId='' } = {}) => {
     }
 }
 
+const useOrder = ({ orderId='', customerId='', locationId='' } = {}) => {
+    const [ id, setId ] = useState(orderId)
+    useEffect(() => {
+        const getOpenOrderId = async () => {
+            try {
+                let data = {
+                    location: locationId,
+                    customer: customerId,
+                }
+                let res = await fetch(`/api/get-open-order-id`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                })
+                let json = await res.json()
+                if (!res.ok) throw Error(json.message)
+                if (json.orderId) {
+                    return json.orderId;
+                }
+            } catch (err) {
+                throw Error(err.message)
+            }
+        }
+        const createOrder = async () => {
+            try {
+                let data = {
+                    customer: customerId,
+                    location: locationId,
+                    courier: null,
+                    status: "Working",
+                }
+                let res = await fetch(`/api/create-order`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                })
+                let json = await res.json()
+                if (!res.ok) throw Error(json.message)
+            } catch (err) {
+                throw Error(err.message)
+            }
+        }
+        const getOrderId = async () => {
+            let openId = await getOpenOrderId()
+            if (!openId) {
+                await createOrder()
+                openId = await getOpenOrderId()
+            }
+            setId(openId)
+        }
+        if (!id) {
+            getOrderId()
+        }
+    }, [customerId, locationId])
+
+    const { data, error } = useSWR(`/api/get-order?orderId=${id}`, fetcher)
+
+    return {
+        order: data,
+        isLoading: !error && !data,
+        isError: error,
+    }
+}
+
+const useOrders = (customerId='') => {
+    const { data, error } = useSWR(`/api/get-orders?customerId=${customerId}`, fetcher)
+
+    return {
+        orders: data,
+        isLoading: !error && !data,
+        isError: error,
+    }
+}
+
+
 const  useOrdersSample = (filter) => {
     //const query = orderId 
     //    ? `orderId=${orderId}` 
@@ -239,13 +339,13 @@ const  useOrdersSample = (filter) => {
 export {
     useEntries,
     useEntry,
-    useCustomersSample as useCustomers,
+    useCustomers,
     useRestaurantsSample as useRestaurants,
-    useLocationsSample as useLocations,
+    useLocations,
     useBrandSample as useBrand,
-    useBrandsSample as useBrands,
-    useMenuItemsSample as useMenuItems,
-    useLineItemsSample as useLineItems,
-    useOrderSample as useOrder,
-    useOrdersSample as useOrders,
+    useBrands,
+    useMenuItems,
+    useLineItems,
+    useOrder,
+    useOrders,
 }
