@@ -47,7 +47,7 @@ export const Header = (): JSX.Element => {
                 <a className={styles.left}>HOME</a>
             </Link>
             {crumbs && crumbs.map((crumb, crumbIdx) => (
-                <Link href={crumb.href} key={crumb.href}>
+                <Link href={`${crumb.href}?customerId=${customerId}`} key={crumb.href}>
                     <a>{'/ ' + convertCrumb(crumb.breadCrumb)}</a>
                 </Link>
             ))}
