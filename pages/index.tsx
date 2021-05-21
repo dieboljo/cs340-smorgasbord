@@ -6,7 +6,7 @@ export const IndexPage = () => {
     return (   
         <Layout home title='The Smorgasbord'>
             <Link href='/customers'>Customer / Courier Page</Link>
-            <p>Allows user to login or register as a Customer, Brand, or Courier.</p>
+            <p>Allows user to "login" or register as a Customer, or register as a Courier.</p>
             <Link href='/brands'>RestaurantBrands Page</Link>
             <p>Lists all RestaurantBrands and their details.</p>
             <Link href='/brands/locations'>RestaurantLocations Page</Link>
