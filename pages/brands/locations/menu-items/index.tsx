@@ -20,13 +20,13 @@ export const MenuPage = () => {
         ? Router.query?.customerId[0]
         : Router.query?.customerId || ''
     )
-    //const [ orderId, setOrderId ] = useState(null);
+    useEffect(() => {
+    }, [customerId])
     const { order, isLoading: orderLoading } = useOrder({ locationId, customerId });
     const { menuItems, isLoading: menuItemsLoading } = useMenuItems(locationId);
     const { lineItems, isLoading: lineItemsLoading } = useLineItems(
         orderLoading ? '' : order.orderId
     );
-    console.log(lineItems)
 
     const addToOrder = async (menuItemId, quantity) => {
         if (!orderLoading) {
@@ -74,7 +74,10 @@ export const MenuPage = () => {
             <div>
             <Update
                 label='Customer ID'
-                updateFunc={setCustomerId}
+                updateFunc={(id) => {
+                    setCustomerId(id);
+                    Router.query.customerId = id;
+                }}
                 isLoading={orderLoading}
                 placeholder={customerId}
             />
