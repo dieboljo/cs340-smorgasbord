@@ -14,7 +14,8 @@ export const BrandForm = () => {
 
     const onLogoChange = (e) => {
         if (!e.target.files?.length) {
-            return;
+            setLogoFileName('');
+            return
         }
         setLogoFileName(e.target.files[0].name);
         setLogoFile(e.target.files[0]);
@@ -22,14 +23,15 @@ export const BrandForm = () => {
 
     async function submitHandler(e) {
         e.preventDefault()
+        const timestamp = String(Date.now())
         let data = { 
             name,
-            //logoFileName
-            logoFileName: 'taco-town.png'
+            logo: logoFileName ? timestamp + '-' + logoFileName : '',
         }
         try {
             setSubmitting(true)
             const formData = new FormData();
+            formData.set('stamp', timestamp);
             formData.set('logo', logoFile);
             let res = await fetch('/api/upload', {
                 method: "POST",

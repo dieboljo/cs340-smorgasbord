@@ -2,26 +2,27 @@ import { NextApiHandler } from 'next'
 import { query } from '@/lib/db'
 
 const handler: NextApiHandler = async (req, res) => {
-    const { locationId } = req.query
+    const { location } = req.query
     try {
-        if (!locationId) {
+        if (!location) {
             const results = await query(
                 `
                     SELECT *
                     FROM MenuItems
                 `
             )
+            return res.json(results)
         } else {
-            if (typeof parseInt(locationId.toString()) !== 'number') {
-                return res.status(400).json({ message: '`locationId` must be a number' })
+            if (typeof parseInt(location.toString()) !== 'number') {
+                return res.status(400).json({ message: '`location` must be a number' })
             }
             const results = await query(
             `
                 SELECT *
                 FROM MenuItems
-                WHERE locationId = ?
+                WHERE location = ?
             `,
-            locationId
+            location
             )
             return res.json(results)
         }

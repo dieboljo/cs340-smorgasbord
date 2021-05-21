@@ -34,7 +34,7 @@ export const CustomerLogin = ({ setCustomer }) => {
                 if (!res.ok) throw Error(json.message)
                 mutate("/api/get-customers")
             } else {
-                setCustomer(name)
+                setCustomer(email)
                 setSubmitting(false)
             }
         } catch (err) {
@@ -47,7 +47,7 @@ export const CustomerLogin = ({ setCustomer }) => {
     return (
         <div className={styles.loginForm}>
             <h2 className={styles.heading}>Login / Register</h2>
-            <form className={styles.form} onSubmit={submitHandler}>
+            <form className={styles.form}> 
                 <div className={styles.field}>
                     <label className={styles.label} htmlFor='customer-email'>Email</label>
                     <input
@@ -74,7 +74,7 @@ export const CustomerLogin = ({ setCustomer }) => {
                 }
                 <div className={styles.toggle} onClick={() => toggleRegister(!register)}>{toggleText}</div>
                 <div className={styles.submit}>
-                    <Button disabled={submitting} type='submit'>
+                    <Button disabled={submitting} type='button' onClick={submitHandler}>
                         {submitting ? "Working ..." : buttonText}
                     </Button>
                 </div>

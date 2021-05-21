@@ -11,7 +11,7 @@ const handler: NextApiHandler = async (req, res) => {
             const results = await query(
                 `
                     SELECT *
-                    FROM Brands
+                    FROM RestaurantBrands
                     WHERE name = ?
                 `,
                 name
@@ -21,7 +21,7 @@ const handler: NextApiHandler = async (req, res) => {
             const results = await query(
                 `
                     SELECT *
-                    FROM Brands
+                    FROM RestaurantBrands
                 `
             )
             return res.json(results)

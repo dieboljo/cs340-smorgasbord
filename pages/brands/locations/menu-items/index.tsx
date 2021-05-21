@@ -24,8 +24,9 @@ export const MenuPage = () => {
     const { order, isLoading: orderLoading } = useOrder({ locationId, customerId });
     const { menuItems, isLoading: menuItemsLoading } = useMenuItems(locationId);
     const { lineItems, isLoading: lineItemsLoading } = useLineItems(
-        orderLoading ? null : order.orderId
+        orderLoading ? '' : order.orderId
     );
+    console.log(lineItems)
 
     const addToOrder = async (menuItemId, quantity) => {
         if (!orderLoading) {

@@ -7,7 +7,7 @@ import Button from '@/components/button'
 import styles from "./restaurant-form.module.scss"
 
 interface RestaurantData {
-    brandId: number,
+    brand: number,
     openTime: string,
     closeTime: string,
     address: string,
@@ -25,7 +25,7 @@ export const RestaurantForm = (props) => {
         setSubmitting(true)
         e.preventDefault()
         const data: RestaurantData = {
-            brandId,
+            brand: brandId,
             openTime,
             closeTime,
             address,
@@ -54,7 +54,7 @@ export const RestaurantForm = (props) => {
     }
 
     return (
-        <form className={styles.row} onSubmit={submitHandler}>
+        <form className={styles.row}> 
             <p>{props.id || ''}</p>
             <div className={styles.field}>
                 <input
@@ -72,21 +72,19 @@ export const RestaurantForm = (props) => {
                     <input
                         id="openTime"
                         className={cn(styles.input, styles.open)}
-                        type="number"
-                        step="1"
+                        type="time"
+                        step="600"
                         value={openTime}
-                        placeholder="Open Time"
-                        onChange={(e) => setOpenTime(parseInt(e.target.value))}
+                        onChange={(e) => setOpenTime(e.target.value)}
                     />
                     {'  -  '}
                     <input
                         id="closeTime"
                         className={cn(styles.input, styles.close)}
-                        type="number"
-                        step="1"
+                        type="time"
+                        step="600"
                         value={closeTime}
-                        placeholder="Close Time"
-                        onChange={(e) => setCloseTime(parseInt(e.target.value))}
+                        onChange={(e) => setCloseTime(e.target.value)}
                     />
                 </div>
             </div>
@@ -107,7 +105,7 @@ export const RestaurantForm = (props) => {
                     Cancel
                 </Button>
             }
-            <Button className={styles.button} disabled={submitting} type="submit">
+            <Button className={styles.button} disabled={submitting} type="button" onClick={submitHandler}>
                 {submitting ? 'Creating ...' : 'Create'}
             </Button>
             </div>
@@ -116,12 +114,12 @@ export const RestaurantForm = (props) => {
 }
 
 RestaurantForm.defaultProps = {
-    id: null,
+    id: '',
     name: '',
-    openTime: 0.00,
-    closeTime: 0.00,
+    openTime: "00:00",
+    closeTime: "23:59",
     address: '',
-    cancel: null,
+    cancel: () => {},
 }
 
 export default RestaurantForm

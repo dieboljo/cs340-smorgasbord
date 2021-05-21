@@ -6,7 +6,7 @@ function fetcher(url: string) {
 }
 
 const useBrands = (name='') => {
-    const { data, error } = useSWR(`/api/get-brands?name=${name}`, fetcher)
+    const { data, error } = useSWR(`/api/get-restaurant-brands?name=${name}`, fetcher)
 
     return {
         brands: data,
@@ -103,8 +103,8 @@ function useRestaurantsSample(filter) {
     }
 }
 
-function useLocations(brandId='') {
-    const { data, error } = useSWR(`/api/get-restaurant-locations?brandId=${brandId}`, fetcher)
+function useLocations(brand='') {
+    const { data, error } = useSWR(`/api/get-restaurant-locations?brand=${brand}`, fetcher)
 
     return {
         locations: data,
@@ -149,8 +149,8 @@ function useBrandSample({ brandId=null, name='', locationId=null } = {}) {
     }
 }
 
-const useMenuItems = (locationId='') => {
-    const { data, error } = useSWR(`/api/get-menu-items?locationId=${locationId}`, fetcher)
+const useMenuItems = (location='') => {
+    const { data, error } = useSWR(`/api/get-menu-items?location=${location}`, fetcher)
 
     return {
         menuItems: data,
@@ -252,8 +252,10 @@ const useOrder = ({ orderId='', customerId='', locationId='' } = {}) => {
                 })
                 let json = await res.json()
                 if (!res.ok) throw Error(json.message)
-                if (json.orderId) {
-                    return json.orderId;
+                if (json && json[0]) {
+                    return json[0].orderId;
+                } else {
+                    return ''
                 }
             } catch (err) {
                 throw Error(err.message)
@@ -288,7 +290,7 @@ const useOrder = ({ orderId='', customerId='', locationId='' } = {}) => {
             }
             setId(openId)
         }
-        if (!id) {
+        if (!id && customerId && locationId) {
             getOrderId()
         }
     }, [customerId, locationId])
@@ -296,7 +298,7 @@ const useOrder = ({ orderId='', customerId='', locationId='' } = {}) => {
     const { data, error } = useSWR(`/api/get-order?orderId=${id}`, fetcher)
 
     return {
-        order: data,
+        order: data, 
         isLoading: !error && !data,
         isError: error,
     }

@@ -7,14 +7,22 @@ const handler: NextApiHandler = async (req, res) => {
         if (!orderId) {
             const results = await query(
                 `
-                    SELECT *
-                    FROM LineItems
+                    SELECT li.lineItemId AS lineItemId, li.quantity AS quantity, 
+                           li.menuItem AS menuItem, mi.name AS name, mi.price AS price
+                    FROM LineItems li
+                    JOIN MenuItems mi ON li.menuItem = mi.menuItemId
                 `
             )
             return res.json(results)
         } else {
             const results = await query(
-                'SELECT * FROM LineItems li WHERE `li.order` = ?',
+                `
+                    SELECT li.lineItemId AS lineItemId, li.quantity AS quantity, 
+                           li.menuItem AS menuItem, mi.name AS name, mi.price AS price
+                    FROM LineItems li
+                    JOIN MenuItems mi ON li.menuItem = mi.menuItemId
+                    WHERE li.order = ?
+                `,
                 orderId
             )
             return res.json(results)

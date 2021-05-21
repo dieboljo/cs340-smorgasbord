@@ -13,7 +13,7 @@ const handler: NextApiHandler = async (req, res) => {
             `,
             email
         )
-        return res.json(results[0])
+        return res.json(results)
     } else {
         const results = await query(
             `
@@ -21,7 +21,7 @@ const handler: NextApiHandler = async (req, res) => {
               FROM Customers
             `
         )
-        return res.json(results[0])
+        return res.json(results)
     }
   } catch (e) {
     res.status(500).json({ message: e.message })
@@ -37,4 +37,4 @@ const handlerSample: NextApiHandler = async (req, res) => {
     return res.json(results);
 }
 
-export default handlerSample
+export default handler

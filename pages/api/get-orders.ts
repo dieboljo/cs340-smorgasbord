@@ -7,22 +7,26 @@ const handler: NextApiHandler = async (req, res) => {
         if (customerId) {
             const results = await query(
             `
-                SELECT o.orderId AS orderId, cu.name AS customer, rl.name AS location, co.name AS courier, o.status AS status FROM Orders
-                JOIN Customers cu ON cu.customerId = o.customer
-                JOIN RestaurantLocations rl ON rl.locationId = o.location
-                LEFT JOIN Couriers co ON co.courierId = o.courier
-                WHERE o.customer = (?)
-            `,
+              SELECT o.orderId AS orderId, cu.name AS customer, rb.name AS location, co.name AS courier, o.status AS status FROM Orders o
+              JOIN Customers cu ON cu.customerId = o.customer
+              JOIN RestaurantLocations rl ON rl.locationId = o.location
+              JOIN RestaurantBrands rb ON rb.brandId = rl.brand
+              LEFT JOIN Couriers co ON co.courierId = o.courier
+              WHERE o.customer = (?)
+              ORDER BY o.orderId
+           `,
             customerId
             )
             return res.json(results)
         } else {
             const results = await query(
                 `
-                    SELECT o.orderId AS orderId, cu.name AS customer, rl.name AS location, co.name AS courier, o.status AS status FROM Orders
-                    JOIN Customers cu ON cu.customerId = o.customer
-                    JOIN RestaurantLocations rl ON rl.locationId = o.location
-                    LEFT JOIN Couriers co ON co.courierId = o.courier
+                  SELECT o.orderId AS orderId, cu.name AS customer, rb.name AS location, co.name AS courier, o.status AS status FROM Orders o
+                  JOIN Customers cu ON cu.customerId = o.customer
+                  JOIN RestaurantLocations rl ON rl.locationId = o.location
+                  JOIN RestaurantBrands rb ON rb.brandId = rl.brand
+                  LEFT JOIN Couriers co ON co.courierId = o.courier
+                  ORDER BY o.orderId
                 `
             )
             return res.json(results)

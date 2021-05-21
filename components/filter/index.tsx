@@ -3,7 +3,7 @@ import { useState } from "react"
 import Button from "@/components/button"
 import styles from "./filter.module.scss"
 
-export const Filter = ({ filterAttribute='', filterFunc, isLoading }) => {
+export const Filter = ({ filterAttribute='', filterFunc, isLoading, placeholder='' }) => {
     const [inputText, setInputText] = useState('');
     const filterText = filterAttribute ? ` by ${filterAttribute}` : ''
 
@@ -14,6 +14,7 @@ export const Filter = ({ filterAttribute='', filterFunc, isLoading }) => {
                     type='text' 
                     value={inputText} 
                     onChange={(e) => setInputText(e.target.value)}
+                    placeholder={placeholder}
                     id='filter-input'
                 />
                 <Button disabled={isLoading} className={styles.button} onClick={() => filterFunc(inputText)}>

@@ -4,7 +4,7 @@ import Layout from "@/components/layout"
 export const IndexPage = () => {
     return (   
         <Layout home title='The Smorgasbord'>
-            <Link href='/customers'>RestaurantBrand / Customer / Courier Page</Link>
+            <Link href='/customers'>Customer / Courier Page</Link>
             <p>Allows user to login or register as a Customer, Brand, or Courier.</p>
             <Link href='/brands'>RestaurantBrands Page</Link>
             <p>Lists all RestaurantBrands and their details.</p>

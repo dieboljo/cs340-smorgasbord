@@ -10,8 +10,10 @@
 }
 
 .close {
-	margin-left: 1rem;
-	width: 50px;
+	display: block;
+	//margin-left: 1rem;
+	margin: auto;
+	width: 120px;
 }
 
 .field {
@@ -28,8 +30,10 @@
 }
 
 .open {
-	margin-right: 1rem;
-	width: 50px;
+	display: block;
+	//margin-right: 1rem;
+	margin: auto;
+	width: 120px;
 }
 
 .submit {

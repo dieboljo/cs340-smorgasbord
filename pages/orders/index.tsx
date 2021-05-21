@@ -7,7 +7,10 @@ import { useOrders } from "@/lib/swr-hooks"
 
 export const OrdersPage = () => {
     const Router = useRouter()
-    const customerId = Router.query?.customerId || ''
+    const customerId = Array.isArray(Router.query?.customerId)
+        ? Router.query?.customerId[0]
+        : Router.query?.customerId || ''
+
     const { orders, isLoading } = useOrders(customerId)
 
     if (isLoading) {

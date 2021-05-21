@@ -5,20 +5,20 @@ import { query } from '@/lib/db'
 const filter = new Filter()
 
 const handler: NextApiHandler = async (req, res) => {
-  const { name, email } = req.body
+  const { brand, openTime, closeTime, address } = req.body
   try {
-    if (!name || !email) {
+    if (!brand || !openTime || !closeTime || !address) {
       return res
         .status(400)
-        .json({ message: '`name` and `email` are both required' })
+        .json({ message: '`brand`, `openTime`, `closeTime`, and `address` are all required' })
     }
 
     const results = await query(
       `
-      INSERT INTO entries (title, content)
-      VALUES (?, ?)
+      INSERT INTO RestaurantLocations (brand, openTime, closeTime, address)
+      VALUES (?, ?, ?, ?)
       `,
-      [filter.clean(name), filter.clean(email)]
+      [brand, openTime, closeTime, filter.clean(address)]
     )
 
     return res.json(results)
@@ -31,4 +31,4 @@ const handlerSample: NextApiHandler = async (req, res) => {
     return res.json(true)
 }
 
-export default handlerSample
+export default handler

@@ -15,7 +15,7 @@ export const Brand = ({ id, name, logo }) => {
         <div className={styles.row}>
             <p className={styles.id}>{id}</p>
             <div className={styles.name}>
-                <img src={`/logos/${logo}`} />
+                {logo && <img src={`/logos/${logo}`} />}
                 <Link 
                     href={`/brands/locations?customerId=${customer}&brandId=${id}`}
                     as={`/brands/locations`}

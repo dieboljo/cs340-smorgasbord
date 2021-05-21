@@ -21,7 +21,7 @@ const handler: NextApiHandler = async (req, res) => {
             `,
             [customer, location]
         )
-        return res.json(results[0])
+        return res.json(results)
     } catch (e) {
         res.status(500).json({ message: e.message })
     }

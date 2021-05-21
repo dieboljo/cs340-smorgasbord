@@ -13,13 +13,12 @@ export const Update = ({ label='', placeholder='', updateFunc, isLoading, value=
 
     return (
             <div className={styles.update}>
-                <label htmlFor='update-input'>{label}:</label>
+                <label>{label}:</label>
                 <input 
                     type='text' 
                     placeholder={placeholder}
                     value={inputText} 
                     onChange={(e) => setInputText(e.target.value)}
-                    id='update-input'
                 />
                 <Button disabled={isLoading} className={styles.button} onClick={submitFunc}>
                     {isLoading ? "Updating ..." : "Update"}

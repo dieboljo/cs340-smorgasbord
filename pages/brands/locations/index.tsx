@@ -38,8 +38,9 @@ export const LocationsPage = () => {
             </div>
             <Filter
                 filterAttribute='Brand ID'
-                filterFunc={setFilterString}
+                filterFunc={(id) => setFilterString(id)}
                 isLoading={isLoading}
+                placeholder={filterString}
             />
             <Restaurants restaurants={locations} />
         </Layout>

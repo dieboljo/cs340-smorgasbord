@@ -32,7 +32,7 @@ export const BrandsPage = () => {
             <div className='heading'>
                 <h2 className='title'>Restaurant Brands</h2>
             </div>
-            <Filter filterAttribute='Brand Name' filterFunc={setFilterString} isLoading={isLoading} />
+            <Filter filterAttribute='Brand Name' filterFunc={(brandName) => setFilterString(brandName)} isLoading={isLoading} />
             <BrandForm />
             <Brands brands={brands} />
         </Layout>
