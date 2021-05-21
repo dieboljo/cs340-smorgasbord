@@ -2,6 +2,7 @@ import Link from "next/link"
 import Layout from "@/components/layout"
 
 export const IndexPage = () => {
+    console.log(process.env)
     return (   
         <Layout home title='The Smorgasbord'>
             <Link href='/customers'>Customer / Courier Page</Link>

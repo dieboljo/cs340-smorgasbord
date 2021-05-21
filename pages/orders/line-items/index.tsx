@@ -16,7 +16,6 @@ export const LineItemsPage = () => {
         ? Router.query?.orderId[0]
         : Router.query?.orderId || ""
     const { order, isLoading: orderLoading } = useOrder({ orderId })
-    console.log(order)
     const { lineItems, isLoading: lineItemsLoading } = useLineItems(orderId)
 
     const completeOrder = async (e) => {
