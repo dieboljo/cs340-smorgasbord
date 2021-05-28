@@ -10,24 +10,25 @@ import { useLineItems, useMenuItems, useOrder } from '@/lib/swr-hooks'
 
 export const MenuPage = () => {
     const Router = useRouter()
+
     const [locationId, setLocationId] = useState(
         Array.isArray(Router.query?.locationId)
         ? Router.query?.locationId[0]
         : Router.query?.locationId || ''
     )
     const [locationHighlight, setLocationHighlight] = useState(false)
+
     const [customerId, setCustomerId] = useState(
         Array.isArray(Router.query?.customerId)
         ? Router.query?.customerId[0]
         : Router.query?.customerId || ''
     )
     const [customerHighlight, setCustomerHighlight] = useState(false)
-    useEffect(() => {
-    }, [customerId])
-    const { order, isLoading: orderLoading } = useOrder({ locationId, customerId });
+
+    const { order, isError: orderError, isLoading: orderLoading } = useOrder({ locationId, customerId });
     const { menuItems, isLoading: menuItemsLoading } = useMenuItems(locationId);
     const { lineItems, isLoading: lineItemsLoading } = useLineItems(
-        orderLoading ? '' : order.orderId
+        order && order.orderId
     );
 
     const addToOrder = async (menuItemId, quantity) => {
@@ -113,7 +114,7 @@ export const MenuPage = () => {
                 addToOrder={addToOrder} 
                 locationAlert={locationAlert}
             />
-            {!orderLoading &&
+            {order && order.orderId && !orderLoading && !orderError &&
                 <Cart
                     cartItems={lineItems}
                     order={order.orderId}

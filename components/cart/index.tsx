@@ -11,6 +11,7 @@ export const Cart = ({ cartItems, order }) => {
     const [isDelivery, setIsDelivery] = useState(true)
     const [ordering, setOrdering] = useState(false)
     const Router = useRouter()
+    const customerId = Router.query.customerId || ''
 
     const orderSubmit = async () => {
         try {
@@ -51,7 +52,7 @@ export const Cart = ({ cartItems, order }) => {
             if (!res.ok) throw Error(json.message)
             Router.push({
                 pathname: "/orders/line-items",
-                query: { orderId: order },
+                query: { orderId: order, customerId },
             }, "/orders/line-items")
         } catch (err) {
             throw Error(err.message)
