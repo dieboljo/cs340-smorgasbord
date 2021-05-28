@@ -27,7 +27,7 @@ export const Restaurant = ({ id, brandId, name, logo, openTime, closeTime, addre
     async function deleteRestaurant() {
         try {
             setDeleting(true)
-            let res = await fetch(`/api/delete-restaurant-location?id=${id}`, {
+            let res = await fetch(`/api/delete-restaurant-location?locationId=${id}`, {
                 method: 'DELETE'
             });
             let json = await res.json()

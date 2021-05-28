@@ -2,7 +2,7 @@ import MenuItem from "./menu-item"
 import MenuItemForm from "@/components/menu-item-form"
 import styles from "./menu.module.scss"
 
-export const Menu = ({ menuItems, location, addToOrder }) => {
+export const Menu = ({ menuItems, location, locationAlert, addToOrder }) => {
 
     return (
         <>
@@ -13,6 +13,7 @@ export const Menu = ({ menuItems, location, addToOrder }) => {
                     <p className={styles.cell}>Description</p>
                     <p className={styles.cell}>Actions</p>
                 </div>
+                <MenuItemForm location={location} locationAlert={locationAlert} />
                 {menuItems && menuItems.map((menuItem) => (
                     <div key={menuItem.menuItemId}>
                         <MenuItem 
@@ -21,12 +22,12 @@ export const Menu = ({ menuItems, location, addToOrder }) => {
                             description={menuItem.description} 
                             price={menuItem.price}
                             location={location}
+                            locationAlert={locationAlert}
                             addItem={addToOrder}
                         />
                     </div>
                 ))}
             </div>
-            <MenuItemForm location={location} />
         </>
     )
 }

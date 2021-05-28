@@ -14,6 +14,7 @@ export const Restaurants = ({ restaurants }) => {
                 <p className={styles.cell}>Address</p>
                 <p className={styles.cell}>Actions</p>
             </div>
+            <RestaurantForm />
             {restaurants && restaurants.map((restaurant) => (
                 <div key={restaurant.locationId} className="py-2">
                     <Restaurant 
@@ -27,7 +28,6 @@ export const Restaurants = ({ restaurants }) => {
                     />
                 </div>
             ))}
-            <RestaurantForm />
         </div>
     )
 }

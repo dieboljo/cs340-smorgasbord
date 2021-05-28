@@ -5,12 +5,13 @@ import { query } from '@/lib/db'
 const filter = new Filter()
 
 const handler: NextApiHandler = async (req, res) => {
-  const { name, description, price, location } = req.body
+  const { name, price, location } = req.body
+  const { description } = req.body || {}
   try {
-    if (!name || !description || !price || !location) {
+    if (!name || !price || !location) {
       return res
         .status(400)
-        .json({ message: '`name`, `description`, `price`, and `location` are all required' })
+        .json({ message: '`name`, `price`, and `location` are all required' })
     }
 
     const results = await query(
@@ -18,7 +19,7 @@ const handler: NextApiHandler = async (req, res) => {
       INSERT INTO MenuItems (name, description, price, location)
       VALUES (?, ?, ?, ?)
       `,
-      [filter.clean(name), filter.clean(description), price, location]
+      [filter.clean(name), description ? filter.clean(description) : null, price, location]
     )
     return res.json(results)
   } catch (e) {

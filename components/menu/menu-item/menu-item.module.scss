@@ -3,12 +3,20 @@
 	padding: 0.5rem;
 }
 
+.description {
+	justify-self: start;
+}
+
 .input {
 	width: 50px;
 }
 
 .label {
 	margin-right: 1rem;
+}
+
+.name {
+	justify-self: end;
 }
 
 .row {

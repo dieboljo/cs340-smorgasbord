@@ -9,6 +9,10 @@
 	width: 300px;
 }
 
+.end {
+	justify-self: end;
+}
+
 .field {
 	text-align: center;
 }
@@ -29,6 +33,10 @@
 	width: 50px;
 }
 
+.start {
+	justify-self: start;
+}
+
 .submit {
 	margin: auto;
 	text-align: center;
@@ -42,7 +50,7 @@
 	grid-template-columns: repeat(4, minmax(200px, 1fr));
 	grid-template-rows: repeat(auto-fill, 3rem);
 	justify-items: center;
-	margin: 2rem auto;
+	margin: 4rem auto;
 	width: 100%;
 }
 

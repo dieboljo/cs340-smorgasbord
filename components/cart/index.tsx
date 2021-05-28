@@ -14,10 +14,31 @@ export const Cart = ({ cartItems, order }) => {
 
     const orderSubmit = async () => {
         try {
-            setOrdering(true)
             let data = {
                 orderId: order,
-                isDelivery,
+                courier: null,
+                status: "Waiting for pickup",
+            }
+            setOrdering(true)
+            if (isDelivery) {
+                try {
+                    let res = await fetch(`/api/get-courier`, {
+                        method: "POST",
+                        headers: {
+                            "Content-type": "application/json",
+                        },
+                    })
+                    let json = await res.json()
+                    if (!res.ok) throw Error(json.message)
+                    if (json && json[0]) {
+                        data.courier = json[0].courierId
+                        data.status = "On the way"
+                    } else {
+                        data.status = "No couriers available"
+                    }
+                } catch (err) {
+                    throw Error(err.message)
+                }
             }
             let res = await fetch(`/api/edit-order`, {
                 method: "POST",
@@ -30,7 +51,7 @@ export const Cart = ({ cartItems, order }) => {
             if (!res.ok) throw Error(json.message)
             Router.push({
                 pathname: "/orders/line-items",
-                query: { orderId: 154 },
+                query: { orderId: order },
             }, "/orders/line-items")
         } catch (err) {
             throw Error(err.message)
@@ -52,7 +73,7 @@ export const Cart = ({ cartItems, order }) => {
                 {cartItems.map((cartItem) => (
                     <div key={cartItem.lineItemId} className='py-2'>
                         <CartItem
-                            id={cartItem.LineItemId}
+                            id={cartItem.lineItemId}
                             quantity={cartItem.quantity}
                             menuItem={cartItem.menuItem}
                             name={cartItem.name}

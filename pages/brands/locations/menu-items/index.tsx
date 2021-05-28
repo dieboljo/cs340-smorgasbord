@@ -15,11 +15,13 @@ export const MenuPage = () => {
         ? Router.query?.locationId[0]
         : Router.query?.locationId || ''
     )
+    const [locationHighlight, setLocationHighlight] = useState(false)
     const [customerId, setCustomerId] = useState(
         Array.isArray(Router.query?.customerId)
         ? Router.query?.customerId[0]
         : Router.query?.customerId || ''
     )
+    const [customerHighlight, setCustomerHighlight] = useState(false)
     useEffect(() => {
     }, [customerId])
     const { order, isLoading: orderLoading } = useOrder({ locationId, customerId });
@@ -31,6 +33,16 @@ export const MenuPage = () => {
     const addToOrder = async (menuItemId, quantity) => {
         if (!orderLoading) {
             try {
+                let alerted = false;
+                if (!customerId) {
+                    setCustomerHighlight(true)
+                    alerted = true
+                }
+                if (!locationId) {
+                    setLocationHighlight(true)
+                    alerted = true
+                }
+                if (alerted) return
                 let data = {
                     order: order.orderId,
                     menuItem: menuItemId,
@@ -50,6 +62,9 @@ export const MenuPage = () => {
             }
         }
     }
+
+    const locationAlert = (isAlerted) => setLocationHighlight(isAlerted);
+    const customerAlert = (isAlerted) => setCustomerHighlight(isAlerted);
 
     if (menuItemsLoading) {
         return (   
@@ -80,18 +95,23 @@ export const MenuPage = () => {
                 }}
                 isLoading={orderLoading}
                 placeholder={customerId}
+                alert={customerAlert}
+                isAlerted={customerHighlight}
             />
             <Update
                 label='Location ID'
                 updateFunc={setLocationId}
                 isLoading={orderLoading}
                 placeholder={locationId}
+                alert={locationAlert}
+                isAlerted={locationHighlight}
             />
             </div>
             <Menu 
                 menuItems={menuItems} 
                 location={locationId}
                 addToOrder={addToOrder} 
+                locationAlert={locationAlert}
             />
             {!orderLoading &&
                 <Cart

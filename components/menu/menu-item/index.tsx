@@ -13,6 +13,7 @@ export const MenuItem = ({
     description,
     price,
     location,
+    locationAlert,
     addItem,
 }) => {
     const [quantity, setQuantity] = useState(0)
@@ -22,7 +23,7 @@ export const MenuItem = ({
     const deleteMenuItem = async () => {
         try {
             setDeleting(true)
-            let res = await fetch(`/api/delete-menu-item?id=${id}`, {
+            let res = await fetch(`/api/delete-menu-item?menuItemId=${id}`, {
                 method: "DELETE",
             })
             let json = await res.json()
@@ -43,6 +44,7 @@ export const MenuItem = ({
                 description={description}
                 price={price}
                 location={location}
+                locationAlert={locationAlert}
                 cancel={() => setEditing(false)}
             />
         )
@@ -78,6 +80,16 @@ export const MenuItem = ({
             </div>
         )
     }
+}
+
+MenuItem.defaultProps = {
+    id: '',
+    name: '',
+    description: '',
+    price: 0.00,
+    location: '',
+    locationAlert: () => {},
+    addItem: () => {},
 }
 
 export default MenuItem

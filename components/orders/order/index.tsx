@@ -18,7 +18,8 @@ export const Order = ({
         Router.push({
             pathname: '/orders/line-items',
             query: { orderId: id },
-        }, '/orders/line-items')
+        },
+        '/orders/line-items')
     }
 
     return (

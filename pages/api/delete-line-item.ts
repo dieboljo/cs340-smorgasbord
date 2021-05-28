@@ -1,5 +1,5 @@
 import { NextApiHandler } from 'next'
-import { query } from '../../lib/db'
+import { query } from '@/lib/db'
 
 const handler: NextApiHandler = async (req, res) => {
   const { id } = req.query
@@ -12,9 +12,9 @@ const handler: NextApiHandler = async (req, res) => {
     }
     const results = await query(
       `
-      DELETE FROM entries
-      WHERE id = ?
-  `,
+      DELETE FROM LineItems
+      WHERE lineItemId = ?
+      `,
       id
     )
     res.json(results)
@@ -23,8 +23,4 @@ const handler: NextApiHandler = async (req, res) => {
   }
 }
 
-const handlerSample: NextApiHandler = async (req, res) => {
-    return res.json(true)
-}
-
-export default handlerSample
+export default handler
