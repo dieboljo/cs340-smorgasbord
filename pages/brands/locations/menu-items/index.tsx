@@ -44,6 +44,7 @@ export const MenuPage = () => {
                     alerted = true
                 }
                 if (alerted) return
+                if (quantity == 0) return
                 let data = {
                     order: order.orderId,
                     menuItem: menuItemId,
