@@ -15,9 +15,7 @@ const handler: NextApiHandler = async (req, res) => {
             `
                 SELECT orderId
                 FROM Orders
-                WHERE customer = ?
-                    AND location = ?
-                    AND status = "Working"
+                WHERE customer = ? AND location = ? AND status = 'Working'
             `,
             [customer, location]
         )
@@ -25,18 +23,6 @@ const handler: NextApiHandler = async (req, res) => {
     } catch (e) {
         res.status(500).json({ message: e.message })
     }
-}
-
-const handlerSample: NextApiHandler = async (req, res) => {
-    const { customerId, locationId } = req.query
-    const results = {
-        orderId: 322,
-        customer: 9999,
-        location: 34,
-        courier: 666,
-        status: 'working',
-    }
-    return res.json(results);
 }
 
 export default handler

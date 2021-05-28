@@ -11,7 +11,7 @@ interface MenuItemData {
     description: string,
     price: number,
     location: number,
-    id?: number,
+    menuItemId?: number,
 }
 
 export const MenuItemForm = (props) => {
@@ -21,20 +21,23 @@ export const MenuItemForm = (props) => {
     const [submitting, setSubmitting] = useState(false)
 
     const submitHandler = async (e) => {
-        setSubmitting(true)
-        e.preventDefault()
-        const data: MenuItemData = {
-            name,
-            description,
-            price,
-            location: props.location,
-        }
-        let prefix = "create";
-        if (props.id) {
-            data.id = props.id;
-            prefix = "edit";
-        } 
         try {
+            setSubmitting(true)
+            e.preventDefault()
+            if (!props.location) {
+                return props.locationAlert(true)
+            }
+            const data: MenuItemData = {
+                name,
+                description,
+                price,
+                location: props.location,
+            }
+            let prefix = "create";
+            if (props.id) {
+                data.menuItemId = props.id;
+                prefix = "edit";
+            } 
             const res = await fetch(`/api/${prefix}-menu-item`, {
                 method: "POST",
                 headers: {
@@ -48,13 +51,17 @@ export const MenuItemForm = (props) => {
         } catch (err) {
             throw Error(err.message)
         } finally {
+            setName(props.name)
+            setDescription(props.description)
+            setPrice(props.price)
             setSubmitting(false)
+            props.cancel()
         }
     }
 
     return (
         <form className={styles.row} onSubmit={submitHandler}>
-            <div className={styles.field}>
+            <div className={cn(styles.field, styles.end)}>
                 <input
                     id="name"
                     className={cn(styles.input, styles.name)}
@@ -76,7 +83,7 @@ export const MenuItemForm = (props) => {
                     onChange={(e) => setPrice(parseFloat(e.target.value))}
                 />
             </div>
-            <div className={styles.field}>
+            <div className={cn(styles.field, styles.start)}>
                 <textarea
                     className={cn(styles.input, styles.description)}
                     id="description"
@@ -101,12 +108,13 @@ export const MenuItemForm = (props) => {
 }
 
 MenuItemForm.defaultProps = {
-    id: null,
+    id: '',
     name: '',
     description: '',
     price: 0.00,
-    location: null,
-    cancel: null,
+    location: '',
+    cancel: () => {},
+    locationAlert: () => {}
 }
 
 export default MenuItemForm

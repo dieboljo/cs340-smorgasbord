@@ -11,11 +11,11 @@ interface RestaurantData {
     openTime: string,
     closeTime: string,
     address: string,
-    id?: number,
+    locationId?: number,
 }
 
 export const RestaurantForm = (props) => {
-    const [brandId, setBrandId] = useState(props.brandId)
+    const [brandId, setBrandId] = useState(props.id)
     const [address, setAddress] = useState(props.address)
     const [openTime, setOpenTime] = useState(props.openTime)
     const [closeTime, setCloseTime] = useState(props.closeTime)
@@ -32,7 +32,7 @@ export const RestaurantForm = (props) => {
         }
         let prefix = "create";
         if (props.id) {
-            data.id = props.id;
+            data.locationId = props.id;
             prefix = "edit";
         } 
         try {
@@ -49,7 +49,12 @@ export const RestaurantForm = (props) => {
         } catch (err) {
             throw Error(err.message)
         } finally {
+            setBrandId(props.id)
+            setAddress(props.address)
+            setOpenTime(props.openTime)
+            setCloseTime(props.closeTime)
             setSubmitting(false)
+            props.cancel()
         }
     }
 

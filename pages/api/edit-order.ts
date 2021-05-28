@@ -5,23 +5,35 @@ import { query } from '@/lib/db'
 const filter = new Filter()
 
 const handler: NextApiHandler = async (req, res) => {
-  const { name, email } = req.body
+  const { orderId, status } = req.body
+  const { courier } = req.body || {}
   try {
-    if (!name || !email) {
+    if (!orderId || !status) {
       return res
         .status(400)
-        .json({ message: '`name` and `email` are both required' })
+        .json({ message: '`orderId` and `status` are both required' })
     }
-
-    const results = await query(
-      `
-      INSERT INTO entries (title, content)
-      VALUES (?, ?)
-      `,
-      [filter.clean(name), filter.clean(email)]
-    )
-
-    return res.json(results)
+    if (req.body.hasOwnProperty('courier')) {
+        const results = await query(
+            `
+                UPDATE Orders
+                SET status = ?, courier = ?
+                WHERE orderId = ?
+            `,
+            [status, courier, orderId]
+        )
+        return res.json(results)
+    } else {
+        const results = await query(
+            `
+                UPDATE Orders
+                SET status = ?
+                WHERE orderId = ?
+            `,
+            [status, orderId]
+        )
+        return res.json(results)
+    }
   } catch (e) {
     res.status(500).json({ message: e.message })
   }
@@ -31,4 +43,4 @@ const handlerSample: NextApiHandler = async (req, res) => {
     return res.json(true)
 }
 
-export default handlerSample
+export default handler

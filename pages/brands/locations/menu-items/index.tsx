@@ -10,27 +10,41 @@ import { useLineItems, useMenuItems, useOrder } from '@/lib/swr-hooks'
 
 export const MenuPage = () => {
     const Router = useRouter()
+
     const [locationId, setLocationId] = useState(
         Array.isArray(Router.query?.locationId)
         ? Router.query?.locationId[0]
         : Router.query?.locationId || ''
     )
+    const [locationHighlight, setLocationHighlight] = useState(false)
+
     const [customerId, setCustomerId] = useState(
         Array.isArray(Router.query?.customerId)
         ? Router.query?.customerId[0]
         : Router.query?.customerId || ''
     )
-    useEffect(() => {
-    }, [customerId])
-    const { order, isLoading: orderLoading } = useOrder({ locationId, customerId });
+    const [customerHighlight, setCustomerHighlight] = useState(false)
+
+    const { order, isError: orderError, isLoading: orderLoading } = useOrder({ locationId, customerId });
     const { menuItems, isLoading: menuItemsLoading } = useMenuItems(locationId);
     const { lineItems, isLoading: lineItemsLoading } = useLineItems(
-        orderLoading ? '' : order.orderId
+        order && order.orderId
     );
 
     const addToOrder = async (menuItemId, quantity) => {
         if (!orderLoading) {
             try {
+                let alerted = false;
+                if (!customerId) {
+                    setCustomerHighlight(true)
+                    alerted = true
+                }
+                if (!locationId) {
+                    setLocationHighlight(true)
+                    alerted = true
+                }
+                if (alerted) return
+                if (quantity == 0) return
                 let data = {
                     order: order.orderId,
                     menuItem: menuItemId,
@@ -50,6 +64,9 @@ export const MenuPage = () => {
             }
         }
     }
+
+    const locationAlert = (isAlerted) => setLocationHighlight(isAlerted);
+    const customerAlert = (isAlerted) => setCustomerHighlight(isAlerted);
 
     if (menuItemsLoading) {
         return (   
@@ -80,20 +97,25 @@ export const MenuPage = () => {
                 }}
                 isLoading={orderLoading}
                 placeholder={customerId}
+                alert={customerAlert}
+                isAlerted={customerHighlight}
             />
             <Update
                 label='Location ID'
                 updateFunc={setLocationId}
                 isLoading={orderLoading}
                 placeholder={locationId}
+                alert={locationAlert}
+                isAlerted={locationHighlight}
             />
             </div>
             <Menu 
                 menuItems={menuItems} 
                 location={locationId}
                 addToOrder={addToOrder} 
+                locationAlert={locationAlert}
             />
-            {!orderLoading &&
+            {order && order.orderId && !orderLoading && !orderError &&
                 <Cart
                     cartItems={lineItems}
                     order={order.orderId}

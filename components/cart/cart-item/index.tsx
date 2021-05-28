@@ -29,6 +29,10 @@ export const CartItem = ({ id, quantity, menuItem, name, price }) => {
     const updateItem = async () => {
         try {
             setUpdating(true)
+            if (newQuantity == 0) {
+                console.log('removing')
+                return removeItem()
+            }
             let data = {
                 lineItemId: id,
                 quantity: newQuantity,
@@ -42,9 +46,10 @@ export const CartItem = ({ id, quantity, menuItem, name, price }) => {
             })
             let json = await res.json()
             if (!res.ok) throw Error(json.message)
-                setUpdating(false)
         } catch (err) {
             throw Error(err.message)
+        } finally {
+            setUpdating(false)
         }
     }
 

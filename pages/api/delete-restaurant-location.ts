@@ -1,21 +1,38 @@
 import { NextApiHandler } from 'next'
-import { query } from '../../lib/db'
+import { query } from '@/lib/db'
 
 const handler: NextApiHandler = async (req, res) => {
-  const { id } = req.query
+  const { locationId } = req.query
   try {
-    if (!id) {
-      return res.status(400).json({ message: '`id` required' })
+    if (!locationId) {
+      return res.status(400).json({ message: '`locationId` required' })
     }
-    if (typeof parseInt(id.toString()) !== 'number') {
-      return res.status(400).json({ message: '`id` must be a number' })
+    if (typeof parseInt(locationId.toString()) !== 'number') {
+      return res.status(400).json({ message: '`locationId` must be a number' })
     }
-    const results = await query(
+
+    let results = await query(
+        `
+            DELETE FROM MenuItems
+            WHERE location = ?
+        `,
+        locationId
+    )
+
+    results = await query(
+        `
+            DELETE FROM Orders
+            WHERE location = ?
+        `,
+        locationId
+    )
+
+    results = await query(
       `
-      DELETE FROM entries
-      WHERE id = ?
+      DELETE FROM RestaurantLocations
+      WHERE locationId = ?
   `,
-      id
+      locationId
     )
     res.json(results)
   } catch (e) {
@@ -23,8 +40,4 @@ const handler: NextApiHandler = async (req, res) => {
   }
 }
 
-const handlerSample: NextApiHandler = async (req, res) => {
-    return res.json(true)
-}
-
-export default handlerSample
+export default handler
