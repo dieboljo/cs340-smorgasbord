@@ -15,7 +15,7 @@ const handler: NextApiHandler = async (req, res) => {
             `
                 SELECT orderId
                 FROM Orders
-                WHERE customer = ? AND location = ? AND status = "Working"
+                WHERE customer = ? AND location = ? AND status = 'Working'
             `,
             [customer, location]
         )
