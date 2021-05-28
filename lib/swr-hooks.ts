@@ -125,7 +125,7 @@ const useOrder = ({ orderId='', customerId='', locationId='' } = {}) => {
             }
             setId(openId)
         }
-        if (!id && customerId && locationId) {
+        if (customerId && locationId) {
             getOrderId()
         }
     }, [customerId, locationId])
