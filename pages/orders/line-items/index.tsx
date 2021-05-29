@@ -26,6 +26,10 @@ export const LineItemsPage = () => {
             status: 'Complete',
         }
         try {
+            mutate(`/api/get-order?orderId=${orderId}`, { 
+                ...order, 
+                status: 'Complete'
+            }, false)
             const res = await fetch(`/api/edit-order`, {
                 method: "POST",
                 headers: {
@@ -35,8 +39,7 @@ export const LineItemsPage = () => {
             })
             const json = await res.json()
             if (!res.ok) throw Error(json.message)
-            mutate('/api/get-orders')
-            mutate('/api/get-order')
+            mutate(`/api/get-order?orderId=${orderId}`)
         } catch (err) {
             throw Error(err.message)
         } finally {

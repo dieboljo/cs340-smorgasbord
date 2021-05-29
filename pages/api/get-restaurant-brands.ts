@@ -13,6 +13,7 @@ const handler: NextApiHandler = async (req, res) => {
                     SELECT *
                     FROM RestaurantBrands
                     WHERE name = ?
+                    ORDER BY brandId DESC
                 `,
                 name
             )
@@ -22,6 +23,7 @@ const handler: NextApiHandler = async (req, res) => {
                 `
                     SELECT *
                     FROM RestaurantBrands
+                    ORDER BY brandId DESC
                 `
             )
             return res.json(results)

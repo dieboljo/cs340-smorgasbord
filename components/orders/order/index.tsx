@@ -1,7 +1,6 @@
 import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { mutate } from "swr"
 
 import Button from "@/components/button"
 import styles from "./order.module.scss"

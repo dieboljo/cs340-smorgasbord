@@ -13,6 +13,18 @@ const handler: NextApiHandler = async (req, res) => {
 
     let results = await query(
         `
+            DELETE FROM LineItems
+            WHERE LineItems.order IN
+            (
+                SELECT orderId FROM Orders
+                WHERE Orders.location = ?
+            )
+        `,
+        locationId
+    )
+
+    results = await query(
+        `
             DELETE FROM MenuItems
             WHERE location = ?
         `,

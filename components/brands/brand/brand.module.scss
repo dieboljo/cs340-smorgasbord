@@ -8,6 +8,14 @@
 		font-weight: bold;
 		font-size: 2rem;
 	}
+	justify-self: start;
+}
+
+.placeholder {
+	display: inline-block;
+	height: 50px;
+	margin-right: 1.5rem;
+	width: 50px;
 }
 
 .row {

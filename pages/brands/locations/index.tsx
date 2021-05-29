@@ -42,7 +42,7 @@ export const LocationsPage = () => {
                 isLoading={isLoading}
                 placeholder={filterString}
             />
-            <Restaurants restaurants={locations} />
+            <Restaurants isFiltered={filterString} restaurants={locations} />
         </Layout>
     )
 }

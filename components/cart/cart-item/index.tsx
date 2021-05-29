@@ -6,19 +6,35 @@ import ButtonLink from '@/components/button-link'
 import Button from '@/components/button'
 import styles from "./cart-item.module.scss"
 
-export const CartItem = ({ id, quantity, menuItem, name, price }) => {
+export const CartItem = ({ cartItems, id, order, quantity, menuItem, name, price }) => {
     const [newQuantity, setNewQuantity] = useState(quantity)
     const [removing, setRemoving] = useState(false)
     const [updating, setUpdating] = useState(false)
     const totalPrice = (price * quantity).toFixed(2)
 
+    const mutateRemove = () => {
+        const filteredCartItems = cartItems.filter(cartItem => cartItem.lineItemId != id)
+        return filteredCartItems
+    }
+
+    const mutateUpdate = () => {
+        const updatedCartItems = cartItems.map(cartItem => {
+            if (cartItem.lineItemId != id) {
+                return cartItem
+            }
+            return { ...cartItem, quantity: newQuantity }
+        })
+        return updatedCartItems
+    }
+
     const removeItem = async () => {
         try {
             setRemoving(true)
-            let res = await fetch(`/api/delete-line-item?id=${id}`, { method: 'DELETE' })
+            mutate(`/api/get-line-items?orderId=${order}`, mutateRemove(), false)
+            let res = await fetch(`/api/delete-line-item?lineItemId=${id}`, { method: 'DELETE' })
             let json = await res.json()
             if (!res.ok) throw Error(json.message)
-            mutate('/api/get-line-items')
+            mutate(`/api/get-line-items?orderId=${order}`)
         } catch(e) {
             throw Error(e.message)
         } finally {
@@ -37,6 +53,7 @@ export const CartItem = ({ id, quantity, menuItem, name, price }) => {
                 lineItemId: id,
                 quantity: newQuantity,
             }
+            mutate(`/api/get-line-items?orderId=${order}`, mutateUpdate(), false)
             let res = await fetch(`/api/edit-line-item`, {
                 method: "POST",
                 headers: {
@@ -46,6 +63,7 @@ export const CartItem = ({ id, quantity, menuItem, name, price }) => {
             })
             let json = await res.json()
             if (!res.ok) throw Error(json.message)
+            mutate(`/api/get-line-items?orderId=${order}`)
         } catch (err) {
             throw Error(err.message)
         } finally {

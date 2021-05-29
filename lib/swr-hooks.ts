@@ -6,7 +6,9 @@ function fetcher(url: string) {
 }
 
 const useBrands = (name='') => {
-    const { data, error } = useSWR(`/api/get-restaurant-brands?name=${name}`, fetcher)
+    const keyWithName = `/api/get-restaurant-brands?name=${name}`
+    const defaultKey = `/api/get-restaurant-brands`
+    const { data, error } = useSWR(name ? keyWithName : defaultKey, fetcher)
 
     return {
         brands: data,
@@ -16,7 +18,9 @@ const useBrands = (name='') => {
 }
 
 function useCustomers(email='') {
-    const { data, error } = useSWR(`/api/get-customers?email=${email}`, fetcher)
+    const keyWithEmail = `/api/get-customers?email=${email}`
+    const defaultKey = `/api/get-customers`
+    const { data, error } = useSWR(email ? keyWithEmail : defaultKey, fetcher)
 
     return {
         customers: data,
@@ -40,7 +44,9 @@ function useEntry(id: string) {
 }
 
 function useLocations(brand='') {
-    const { data, error } = useSWR(`/api/get-restaurant-locations?brand=${brand}`, fetcher)
+    const defaultKey = `/api/get-restaurant-locations`
+    const keyWithBrand = `/api/get-restaurant-locations?brand=${brand}`
+    const { data, error } = useSWR(brand ? keyWithBrand : defaultKey, fetcher)
 
     return {
         locations: data,
@@ -50,7 +56,9 @@ function useLocations(brand='') {
 }
 
 const useMenuItems = (location='') => {
-    const { data, error } = useSWR(`/api/get-menu-items?location=${location}`, fetcher)
+    const defaultKey = `/api/get-menu-items`
+    const keyWithLocation = `/api/get-menu-items?location=${location}`
+    const { data, error } = useSWR(location ? keyWithLocation : defaultKey, fetcher)
 
     return {
         menuItems: data,
@@ -60,7 +68,9 @@ const useMenuItems = (location='') => {
 }
 
 const useLineItems = (orderId='') => {
-    const { data, error } = useSWR(`/api/get-line-items?orderId=${orderId}`, fetcher)
+    const defaultKey = `/api/get-line-items`
+    const keyWithOrder = `/api/get-line-items?orderId=${orderId}`
+    const { data, error } = useSWR(orderId ? keyWithOrder : defaultKey, fetcher)
 
     return {
         lineItems: data,

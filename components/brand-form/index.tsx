@@ -5,28 +5,46 @@ import { mutate } from "swr"
 import Button from "@/components/button"
 import styles from "./brand-form.module.scss"
 
-export const BrandForm = () => {
+export const BrandForm = ({ brands, currentFilter }) => {
     const [name, setName] = useState("")
     const [logoFileName, setLogoFileName] = useState("")
     const [logoFile, setLogoFile] = useState("")
     const [submitting, setSubmitting] = useState(false)
     const Router = useRouter()
+    let timestamp = String(Date.now())
 
     const onLogoChange = (e) => {
         if (!e.target.files?.length) {
             setLogoFileName('');
             return
         }
-        setLogoFileName(e.target.files[0].name);
+        timestamp = String(Date.now())
+        setLogoFileName(timestamp + '-' + e.target.files[0].name);
         setLogoFile(e.target.files[0]);
     }
 
+    const mutateKey = currentFilter
+        ? `/api/get-restaurant-brands?name=${currentFilter}`
+        : `/api/get-restaurant-brands`
+
+    const mutateCreate = () => {
+        const topId = brands.reduce((a, b) => {
+            return { brandId: Math.max(a.brandId, b.brandId) }
+        })
+        const newBrand = { 
+            brandId: topId.brandId + 1,
+            name,
+            logo: logoFileName || '',
+        }
+        return [newBrand, ...brands]
+    }
+
+
     async function submitHandler(e) {
         e.preventDefault()
-        const timestamp = String(Date.now())
         let data = { 
             name,
-            logo: logoFileName ? timestamp + '-' + logoFileName : '',
+            logo: logoFileName || '',
         }
         try {
             setSubmitting(true)
@@ -42,6 +60,7 @@ export const BrandForm = () => {
             });
             let json = await res.json()
             if (!res.ok) throw Error(json.message)
+            mutate(mutateKey, mutateCreate(), false)
             res = await fetch(`/api/create-restaurant-brand`, {
                 method: "POST",
                 headers: {
@@ -51,10 +70,13 @@ export const BrandForm = () => {
             })
             json = await res.json()
             if (!res.ok) throw Error(json.message)
-            mutate("/api/get-restaurant-brands")
+            mutate(mutateKey)
         } catch (e) {
             throw Error(e.message)
         } finally {
+            setName('')
+            setLogoFileName('')
+            setLogoFile('')
             setSubmitting(false)
         }
     }
