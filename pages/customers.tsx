@@ -15,7 +15,10 @@ export const CustomersPage = () => {
     return (   
         <Layout home title='The Smorgasbord'>
             <div className='loginContainer'>
-            <CustomerLogin setCustomer={(customer) => setFilterString(customer)} />
+            <CustomerLogin 
+                customers={customers}
+                setCustomer={(customer) => setFilterString(customer)} 
+            />
                 <CourierForm />
             </div> 
             <Customers customers={customers} />

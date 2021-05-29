@@ -15,6 +15,7 @@ const handler: NextApiHandler = async (req, res) => {
                     FROM RestaurantLocations rl
                     JOIN RestaurantBrands rb on rl.brand = rb.brandId
                     WHERE brandId = ?
+                    ORDER BY rl.locationId DESC
                 `,
                 brand
             )
@@ -26,6 +27,7 @@ const handler: NextApiHandler = async (req, res) => {
                            rl.openTime AS openTime, rl.closeTime AS closeTime, rl.address AS address
                     FROM RestaurantLocations rl
                     JOIN RestaurantBrands rb on rl.brand = rb.brandId
+                    ORDER BY rl.locationId DESC
                 `
             )
             return res.json(results)

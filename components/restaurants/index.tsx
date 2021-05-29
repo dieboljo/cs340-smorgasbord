@@ -1,10 +1,10 @@
 import cn from "clsx"
 
 import RestaurantForm from "@/components/restaurant-form"
-import Restaurant from './restaurant';
+import Restaurant from "./restaurant"
 import styles from "./restaurants.module.scss"
 
-export const Restaurants = ({ restaurants }) => {
+export const Restaurants = ({ isFiltered, restaurants }) => {
     return (
         <div className={styles.container}>
             <div className={styles.row}>
@@ -14,20 +14,26 @@ export const Restaurants = ({ restaurants }) => {
                 <p className={styles.cell}>Address</p>
                 <p className={styles.cell}>Actions</p>
             </div>
-            <RestaurantForm />
-            {restaurants && restaurants.map((restaurant) => (
-                <div key={restaurant.locationId} className="py-2">
-                    <Restaurant 
-                        id={restaurant.locationId} 
-                        brandId={restaurant.brandId}
-                        name={restaurant.name}
-                        logo={restaurant.logo}
-                        openTime={restaurant.openTime} 
-                        closeTime={restaurant.closeTime} 
-                        address={restaurant.address} 
-                    />
-                </div>
-            ))}
+            <RestaurantForm
+                currentFilter={isFiltered}
+                restaurants={restaurants}
+            />
+            {restaurants &&
+                restaurants.map((restaurant) => (
+                    <div key={restaurant.locationId} className='py-2'>
+                        <Restaurant
+                            address={restaurant.address}
+                            brandId={restaurant.brandId}
+                            closeTime={restaurant.closeTime}
+                            id={restaurant.locationId}
+                            logo={restaurant.logo}
+                            name={restaurant.name}
+                            openTime={restaurant.openTime}
+                            isFiltered={isFiltered}
+                            restaurants={restaurants}
+                        />
+                    </div>
+                ))}
         </div>
     )
 }

@@ -16,14 +16,43 @@ interface MenuItemData {
 
 export const MenuItemForm = (props) => {
     const [name, setName] = useState(props.name)
-    const [description, setDescription] = useState(props.description)
+    const [description, setDescription] = useState(props.description || '')
     const [price, setPrice] = useState(props.price)
     const [submitting, setSubmitting] = useState(false)
+
+    const mutateCreate = () => {
+        const topId = props.menuItems.reduce((a, b) => {
+            return {menuItemId: Math.max(a.menuItemId, b.menuItemId)}
+        })
+        const newMenuItem = { 
+            menuItemId: topId.menuItemId + 1,
+            name,
+            description,
+            price,
+            location: props.location,
+        }
+        return [newMenuItem, ...props.menuItems]
+    }
+
+    const mutateUpdate = () => {
+        const updatedMenuItems = props.menuItems.map(menuItem => {
+            if (menuItem.menuItemId != props.id) {
+                return menuItem
+            }
+            return { menuItemId: props.id, name, description, price, location: props.location }
+        })
+        return updatedMenuItems
+    }
+
+    const mutateKey = props.isFiltered
+        ? `/api/get-menu-items?location=${props.location}`
+        : `/api/get-menu-items`;
 
     const submitHandler = async (e) => {
         try {
             setSubmitting(true)
             e.preventDefault()
+            if (!name || price <= 0) return
             if (!props.location) {
                 return props.locationAlert(true)
             }
@@ -34,10 +63,13 @@ export const MenuItemForm = (props) => {
                 location: props.location,
             }
             let prefix = "create";
+            let mutatePatch = mutateCreate()
             if (props.id) {
                 data.menuItemId = props.id;
                 prefix = "edit";
+                mutatePatch = mutateUpdate()
             } 
+            mutate(mutateKey, mutatePatch, false)
             const res = await fetch(`/api/${prefix}-menu-item`, {
                 method: "POST",
                 headers: {
@@ -47,7 +79,7 @@ export const MenuItemForm = (props) => {
             })
             const json = await res.json()
             if (!res.ok) throw Error(json.message)
-            mutate('/api/get-menu-items')
+            mutate(mutateKey)
         } catch (err) {
             throw Error(err.message)
         } finally {
@@ -60,7 +92,7 @@ export const MenuItemForm = (props) => {
     }
 
     return (
-        <form className={styles.row} onSubmit={submitHandler}>
+        <div className={styles.row}> 
             <div className={cn(styles.field, styles.end)}>
                 <input
                     id="name"
@@ -88,33 +120,35 @@ export const MenuItemForm = (props) => {
                     className={cn(styles.input, styles.description)}
                     id="description"
                     name="description"
-                    value={description}
+                    value={description || ''}
                     placeholder="Description"
                     onChange={(e) => setDescription(e.target.value)}
                 />
             </div>
             <div>
             {props.id &&
-                <Button className={styles.button} disabled={submitting} onClick={() => props.cancel()}>
+                <Button className={styles.button} disabled={submitting} type="button" onClick={() => props.cancel()}>
                     Cancel
                 </Button>
             }
-            <Button className={styles.button} disabled={submitting} type="submit">
+            <Button className={styles.button} disabled={submitting} type="button" onClick={submitHandler}>
                 {submitting ? 'Creating ...' : 'Create'}
             </Button>
             </div>
-        </form>
+        </div>
     )
 }
 
 MenuItemForm.defaultProps = {
     id: '',
+    isFiltered: false,
     name: '',
     description: '',
     price: 0.00,
     location: '',
     cancel: () => {},
-    locationAlert: () => {}
+    locationAlert: () => {},
+    menuItems: []
 }
 
 export default MenuItemForm

@@ -13,17 +13,19 @@ export const Menu = ({ menuItems, location, locationAlert, addToOrder }) => {
                     <p className={styles.cell}>Description</p>
                     <p className={styles.cell}>Actions</p>
                 </div>
-                <MenuItemForm location={location} locationAlert={locationAlert} />
+                <MenuItemForm isFiltered={location ? true : false} location={location} locationAlert={locationAlert} menuItems={menuItems} />
                 {menuItems && menuItems.map((menuItem) => (
                     <div key={menuItem.menuItemId}>
                         <MenuItem 
-                            id={menuItem.menuItemId} 
-                            name={menuItem.name}
-                            description={menuItem.description} 
-                            price={menuItem.price}
-                            location={location}
-                            locationAlert={locationAlert}
                             addItem={addToOrder}
+                            description={menuItem.description} 
+                            id={menuItem.menuItemId} 
+                            isFiltered={location ? true : false}
+                            location={menuItem.location}
+                            locationAlert={locationAlert}
+                            menuItems={menuItems}
+                            name={menuItem.name}
+                            price={menuItem.price}
                         />
                     </div>
                 ))}

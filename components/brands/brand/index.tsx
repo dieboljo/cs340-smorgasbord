@@ -2,7 +2,6 @@ import cn from "clsx"
 import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { mutate } from "swr"
 
 import Button from "@/components/button"
 import styles from "./brand.module.scss"
@@ -15,7 +14,10 @@ export const Brand = ({ id, name, logo }) => {
         <div className={styles.row}>
             <p className={styles.id}>{id}</p>
             <div className={styles.name}>
-                {logo && <img src={`/logos/${logo}`} />}
+                {logo 
+                    ? <img src={`/logos/${logo}`} />
+                    : <div className={styles.placeholder}></div>
+                }
                 <Link 
                     href={`/brands/locations?customerId=${customer}&brandId=${id}`}
                     as={`/brands/locations`}

@@ -21,6 +21,54 @@ export const RestaurantForm = (props) => {
     const [closeTime, setCloseTime] = useState(props.closeTime)
     const [submitting, setSubmitting] = useState(false)
 
+    const mutateCreate = () => {
+        const topId = props.restaurants.reduce((a, b) => {
+            return {locationId: Math.max(a.locationId, b.locationId)}
+        })
+        let name = ''
+        let logo = ''
+        for (let restaurant of props.restaurants) {
+            if (restaurant.brandId == brandId) {
+                name = restaurant.name;
+                logo = restaurant.logo;
+                break
+            }
+        }
+        const newRestaurant = { 
+            locationId: topId.locationId + 1,
+            brandId,
+            openTime,
+            closeTime,
+            address,
+            logo,
+            name,
+        }
+        return [newRestaurant, ...props.restaurants]
+    }
+
+    const mutateUpdate = () => {
+        const updatedRestaurants = props.restaurants.map(restaurant => {
+            if (restaurant.locationId != props.id) {
+                return restaurant
+            }
+            let name = ''
+            let logo = ''
+            for (let restaurant of props.restaurants) {
+                if (restaurant.brandId == brandId) {
+                    name = restaurant.name;
+                    logo = restaurant.logo;
+                    break
+                }
+            }
+            return { ...restaurant, brandId, openTime, closeTime,address, name, logo } 
+        })
+        return updatedRestaurants
+    }
+
+    const mutateKey = props.currentFilter
+        ? `/api/get-restaurant-locations?brand=${props.currentFilter}`
+        : `/api/get-restaurant-locations`
+
     const submitHandler = async (e) => {
         setSubmitting(true)
         e.preventDefault()
@@ -31,11 +79,14 @@ export const RestaurantForm = (props) => {
             address,
         }
         let prefix = "create";
+        let mutatePatch = mutateCreate()
         if (props.id) {
             data.locationId = props.id;
             prefix = "edit";
+            mutatePatch = mutateUpdate()
         } 
         try {
+            mutate(mutateKey, mutatePatch, false)
             const res = await fetch(`/api/${prefix}-restaurant-location`, {
                 method: "POST",
                 headers: {
@@ -45,7 +96,7 @@ export const RestaurantForm = (props) => {
             })
             const json = await res.json()
             if (!res.ok) throw Error(json.message)
-            mutate('/api/get-restaurant-locations')
+            mutate(mutateKey)
         } catch (err) {
             throw Error(err.message)
         } finally {
@@ -119,12 +170,14 @@ export const RestaurantForm = (props) => {
 }
 
 RestaurantForm.defaultProps = {
+    currentFilter: '',
     id: '',
     name: '',
     openTime: "00:00",
     closeTime: "23:59",
     address: '',
     cancel: () => {},
+    restaurants: [],
 }
 
 export default RestaurantForm

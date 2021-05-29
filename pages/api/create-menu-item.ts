@@ -19,7 +19,7 @@ const handler: NextApiHandler = async (req, res) => {
       INSERT INTO MenuItems (name, description, price, location)
       VALUES (?, ?, ?, ?)
       `,
-      [filter.clean(name), description ? filter.clean(description) : null, price, location]
+      [filter.clean(name), description ? filter.clean(description) : '', price, location]
     )
     return res.json(results)
   } catch (e) {

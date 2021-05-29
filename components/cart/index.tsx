@@ -74,10 +74,12 @@ export const Cart = ({ cartItems, order }) => {
                 {cartItems.map((cartItem) => (
                     <div key={cartItem.lineItemId} className='py-2'>
                         <CartItem
+                            cartItems={cartItems}
                             id={cartItem.lineItemId}
                             quantity={cartItem.quantity}
                             menuItem={cartItem.menuItem}
                             name={cartItem.name}
+                            order={order}
                             price={cartItem.price}
                         />
                     </div>

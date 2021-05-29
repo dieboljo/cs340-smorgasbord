@@ -20,7 +20,7 @@ const handler: NextApiHandler = async (req, res) => {
         SET name = ?, description = ?, price = ?, location = ?
         WHERE menuItemId = ?
       `,
-      [filter.clean(name), filter.clean(description), price, filter.clean(location), menuItemId]
+      [filter.clean(name), description ? filter.clean(description) : '', price, location, menuItemId]
     )
 
     return res.json(results)
@@ -29,8 +29,4 @@ const handler: NextApiHandler = async (req, res) => {
   }
 }
 
-const handlerSample: NextApiHandler = async (req, res) => {
-    return res.json(true)
-}
-
-export default handlerSample
+export default handler
