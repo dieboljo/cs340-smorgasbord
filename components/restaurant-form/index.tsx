@@ -23,7 +23,7 @@ export const RestaurantForm = (props) => {
 
     const mutateCreate = () => {
         let topId = { locationId: 1 }
-        if (restaurants.length) {
+        if (props.restaurants.length) {
             topId = props.restaurants.reduce((a, b) => {
                 return {locationId: Math.max(a.locationId, b.locationId)}
             })
