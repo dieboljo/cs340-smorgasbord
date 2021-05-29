@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import Skeleton from "react-loading-skeleton"
+import { mutate } from "swr"
 
 import Cart from "@/components/cart"
 import Layout from "@/components/layout"
@@ -31,6 +32,32 @@ export const MenuPage = () => {
         order && order.orderId
     );
 
+    const mutateCreate = (menuItemId, quantity) => {
+        let topId = { lineItemId: 1 }
+        if (lineItems.length) {
+            topId = lineItems.reduce((a, b) => {
+                return { lineItemId: Math.max(a.lineItemId, b.lineItemId) }
+            })
+        }
+        let name = ''
+        let price = ''
+        for (let item of menuItems) {
+            if (item.menuItemId == menuItemId) {
+                name = item.name;
+                price = item.price;
+                break
+            }
+        }
+        const newLineItem = { 
+            lineItemId: topId.lineItemId + 1,
+            menuItem: menuItemId,
+            quantity,
+            name,
+            price
+        }
+        return [newLineItem, ...lineItems]
+    }
+
     const addToOrder = async (menuItemId, quantity) => {
         if (!orderLoading) {
             try {
@@ -50,6 +77,8 @@ export const MenuPage = () => {
                     menuItem: menuItemId,
                     quantity,
                 }
+                mutate(`/api/get-line-items?orderId=${order.orderId}`,
+                       mutateCreate(menuItemId, quantity), false)
                 let res = await fetch(`/api/create-line-item`, {
                     method: "POST",
                     headers: {
@@ -59,6 +88,7 @@ export const MenuPage = () => {
                 })
                 let json = await res.json()
                 if (!res.ok) throw Error(json.message)
+                mutate(`/api/get-line-items?orderId=${order.orderId}`)
             } catch (err) {
                 throw Error(err.message)
             }

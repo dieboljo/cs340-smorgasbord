@@ -82,7 +82,10 @@ export const MenuItem = ({
                         value={quantity}
                         onChange={(e) => setQuantity(parseInt(e.target.value))}
                     />
-                    <Button className={styles.button} onClick={() => addItem(id, quantity)}>Add</Button>
+                    <Button className={styles.button} type="button" onClick={() => {
+                        addItem(id, quantity)
+                        setQuantity(0)
+                    }}>Add</Button>
                     <Button
                         className={styles.button}
                         disabled={deleting}

@@ -15,7 +15,7 @@ interface RestaurantData {
 }
 
 export const RestaurantForm = (props) => {
-    const [brandId, setBrandId] = useState(props.brandId)
+    const [brandId, setBrandId] = useState(props.brandId || props.currentFilter)
     const [address, setAddress] = useState(props.address)
     const [openTime, setOpenTime] = useState(props.openTime)
     const [closeTime, setCloseTime] = useState(props.closeTime)
@@ -103,7 +103,6 @@ export const RestaurantForm = (props) => {
         } catch (err) {
             throw Error(err.message)
         } finally {
-            setBrandId(props.id)
             setAddress(props.address)
             setOpenTime(props.openTime)
             setCloseTime(props.closeTime)
@@ -113,7 +112,7 @@ export const RestaurantForm = (props) => {
     }
 
     return (
-        <form className={styles.row}> 
+        <div className={styles.row}> 
             <p>{props.id || ''}</p>
             <div className={styles.field}>
                 <input
@@ -168,7 +167,7 @@ export const RestaurantForm = (props) => {
                 {submitting ? 'Creating ...' : 'Create'}
             </Button>
             </div>
-        </form>
+        </div>
     )
 }
 
