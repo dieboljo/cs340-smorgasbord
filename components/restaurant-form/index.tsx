@@ -15,16 +15,19 @@ interface RestaurantData {
 }
 
 export const RestaurantForm = (props) => {
-    const [brandId, setBrandId] = useState(props.id)
+    const [brandId, setBrandId] = useState(props.brandId)
     const [address, setAddress] = useState(props.address)
     const [openTime, setOpenTime] = useState(props.openTime)
     const [closeTime, setCloseTime] = useState(props.closeTime)
     const [submitting, setSubmitting] = useState(false)
 
     const mutateCreate = () => {
-        const topId = props.restaurants.reduce((a, b) => {
-            return {locationId: Math.max(a.locationId, b.locationId)}
-        })
+        let topId = { locationId: 1 }
+        if (restaurants.length) {
+            topId = props.restaurants.reduce((a, b) => {
+                return {locationId: Math.max(a.locationId, b.locationId)}
+            })
+        }
         let name = ''
         let logo = ''
         for (let restaurant of props.restaurants) {
@@ -170,6 +173,7 @@ export const RestaurantForm = (props) => {
 }
 
 RestaurantForm.defaultProps = {
+    brandId: '',
     currentFilter: '',
     id: '',
     name: '',

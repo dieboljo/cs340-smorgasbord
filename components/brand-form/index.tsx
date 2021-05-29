@@ -11,14 +11,13 @@ export const BrandForm = ({ brands, currentFilter }) => {
     const [logoFile, setLogoFile] = useState("")
     const [submitting, setSubmitting] = useState(false)
     const Router = useRouter()
-    let timestamp = String(Date.now())
 
     const onLogoChange = (e) => {
         if (!e.target.files?.length) {
             setLogoFileName('');
             return
         }
-        timestamp = String(Date.now())
+        const timestamp = String(Date.now())
         setLogoFileName(timestamp + '-' + e.target.files[0].name);
         setLogoFile(e.target.files[0]);
     }
@@ -28,9 +27,12 @@ export const BrandForm = ({ brands, currentFilter }) => {
         : `/api/get-restaurant-brands`
 
     const mutateCreate = () => {
-        const topId = brands.reduce((a, b) => {
-            return { brandId: Math.max(a.brandId, b.brandId) }
-        })
+        let topId = { brandId: 1 }
+        if (brands.length) {
+            topId = brands.reduce((a, b) => {
+                return { brandId: Math.max(a.brandId, b.brandId) }
+            })
+        }
         const newBrand = { 
             brandId: topId.brandId + 1,
             name,
@@ -49,7 +51,7 @@ export const BrandForm = ({ brands, currentFilter }) => {
         try {
             setSubmitting(true)
             const formData = new FormData();
-            formData.set('stamp', timestamp);
+            formData.set('fileName', logoFileName);
             formData.set('logo', logoFile);
             let res = await fetch('/api/upload', {
                 method: "POST",
@@ -75,8 +77,6 @@ export const BrandForm = ({ brands, currentFilter }) => {
             throw Error(e.message)
         } finally {
             setName('')
-            setLogoFileName('')
-            setLogoFile('')
             setSubmitting(false)
         }
     }

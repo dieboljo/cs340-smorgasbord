@@ -21,9 +21,12 @@ export const MenuItemForm = (props) => {
     const [submitting, setSubmitting] = useState(false)
 
     const mutateCreate = () => {
-        const topId = props.menuItems.reduce((a, b) => {
-            return {menuItemId: Math.max(a.menuItemId, b.menuItemId)}
-        })
+        let topId = {menuItemId: 1}
+        if (props.menuItems.length) {
+            topId = props.menuItems.reduce((a, b) => {
+                return {menuItemId: Math.max(a.menuItemId, b.menuItemId)}
+            })
+        }
         const newMenuItem = { 
             menuItemId: topId.menuItemId + 1,
             name,
