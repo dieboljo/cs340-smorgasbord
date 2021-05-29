@@ -10,6 +10,7 @@ const handler: NextApiHandler = async (req, res) => {
               SELECT * 
               FROM Customers
               WHERE email = ?
+              ORDER BY customerId DESC
             `,
             email
         )
@@ -19,6 +20,7 @@ const handler: NextApiHandler = async (req, res) => {
             `
               SELECT *
               FROM Customers
+              ORDER BY customerId DESC
             `
         )
         return res.json(results)

@@ -64,8 +64,10 @@ export const Restaurant = ({
         }
     }
 
+    let formContents;
+
     if (editing) {
-        return (
+        formContents =  (
             <RestaurantForm
                 id={id}
                 brandId={brandId}
@@ -78,7 +80,7 @@ export const Restaurant = ({
             />
         )
     } else {
-        return (
+        formContents = (
             <div className={styles.row}>
                 <p className={styles.id}>{id}</p>
                 <div className={styles.name}>
@@ -113,6 +115,12 @@ export const Restaurant = ({
             </div>
         )
     }
+
+    return (
+        <form>
+            {formContents}
+        </form>
+    )
 }
 
 export default Restaurant

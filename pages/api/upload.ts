@@ -11,18 +11,18 @@ export default async (req, res) => {
     const form = new formidable.IncomingForm();
     form.uploadDir = "public/logos";
     form.keepExtensions = true;
-    let filePrefix = '';
+    let fileName = '';
 
     form.once('error', (err) => {
         res.status(501).json({ error:   'Formidable error.' });
     })
     .on('field', (fieldName, fieldValue) => {
-        if (fieldName == 'stamp') {
-            filePrefix = fieldValue;
+        if (fieldName == 'fileName') {
+            fileName = fieldValue;
         }
     })
     .on('fileBegin', (name, file) => {
-        file.path = form.uploadDir + '/' + filePrefix + '-' + file.name;
+        file.path = form.uploadDir + '/' + fileName;
     })
     .once('end', () => {
         return res.status(200).json({ data: 'success'})

@@ -15,16 +15,19 @@ interface RestaurantData {
 }
 
 export const RestaurantForm = (props) => {
-    const [brandId, setBrandId] = useState(props.id)
+    const [brandId, setBrandId] = useState(props.brandId || props.currentFilter)
     const [address, setAddress] = useState(props.address)
     const [openTime, setOpenTime] = useState(props.openTime)
     const [closeTime, setCloseTime] = useState(props.closeTime)
     const [submitting, setSubmitting] = useState(false)
 
     const mutateCreate = () => {
-        const topId = props.restaurants.reduce((a, b) => {
-            return {locationId: Math.max(a.locationId, b.locationId)}
-        })
+        let topId = { locationId: 1 }
+        if (props.restaurants.length) {
+            topId = props.restaurants.reduce((a, b) => {
+                return {locationId: Math.max(a.locationId, b.locationId)}
+            })
+        }
         let name = ''
         let logo = ''
         for (let restaurant of props.restaurants) {
@@ -100,7 +103,6 @@ export const RestaurantForm = (props) => {
         } catch (err) {
             throw Error(err.message)
         } finally {
-            setBrandId(props.id)
             setAddress(props.address)
             setOpenTime(props.openTime)
             setCloseTime(props.closeTime)
@@ -110,7 +112,7 @@ export const RestaurantForm = (props) => {
     }
 
     return (
-        <form className={styles.row}> 
+        <div className={styles.row}> 
             <p>{props.id || ''}</p>
             <div className={styles.field}>
                 <input
@@ -165,11 +167,12 @@ export const RestaurantForm = (props) => {
                 {submitting ? 'Creating ...' : 'Create'}
             </Button>
             </div>
-        </form>
+        </div>
     )
 }
 
 RestaurantForm.defaultProps = {
+    brandId: '',
     currentFilter: '',
     id: '',
     name: '',
