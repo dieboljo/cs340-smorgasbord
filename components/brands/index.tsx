@@ -18,7 +18,6 @@ export const Brands = ({ brands }) => {
                   id={brand.brandId} 
                   name={brand.name}
                   logo={brand.logo}
-                  brands={brands}
               />
           </div>
         ))}
