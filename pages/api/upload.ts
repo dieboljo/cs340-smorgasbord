@@ -14,7 +14,7 @@ export default async (req, res) => {
     let fileName = '';
 
     form.once('error', (err) => {
-        res.status(501).json({ error:   'Formidable error.' });
+        res.status(501).json({ error: 'Formidable error.' });
     })
     .on('field', (fieldName, fieldValue) => {
         if (fieldName == 'fileName') {
@@ -25,7 +25,7 @@ export default async (req, res) => {
         file.path = form.uploadDir + '/' + fileName;
     })
     .once('end', () => {
-        return res.status(200).json({ data: 'success'})
+        res.status(200).json({ data: 'success'})
     });
     form.parse(req)
 };
