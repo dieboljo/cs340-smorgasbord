@@ -26,7 +26,7 @@ export const BrandForm = ({ brands, currentFilter }) => {
         ? `/api/get-restaurant-brands?name=${currentFilter}`
         : `/api/get-restaurant-brands`
 
-    const mutateCreate = () => {
+    const mutateCreate = (fileUrl) => {
         let topId = { brandId: 1 }
         if (brands.length) {
             topId = brands.reduce((a, b) => {
@@ -36,7 +36,7 @@ export const BrandForm = ({ brands, currentFilter }) => {
         const newBrand = { 
             brandId: topId.brandId + 1,
             name,
-            logo: logoFileName || '',
+            logo: fileUrl || '',
         }
         return [newBrand, ...brands]
     }
@@ -44,25 +44,34 @@ export const BrandForm = ({ brands, currentFilter }) => {
 
     async function submitHandler(e) {
         e.preventDefault()
-        let data = { 
-            name,
-            logo: logoFileName || '',
-        }
+        const uriFileName = encodeURIComponent(logoFileName)
         try {
             setSubmitting(true)
-            const formData = new FormData();
-            formData.set('fileName', logoFileName);
-            formData.set('logo', logoFile);
-            let res = await fetch('/api/upload', {
-                method: "POST",
-                //headers: {
-                //"Content-Type": "multipart/form-data",
-                //},
-                body: formData,
-            });
+            let res = await fetch(`/api/upload-aws?file=${uriFileName}`);
             let json = await res.json()
             if (!res.ok) throw Error(json.message)
-            mutate(mutateKey, mutateCreate(), false)
+            const { url, fields } = json
+            console.log(url)
+            const formData = new FormData();
+            Object.entries({ ...fields, file: logoFile }).forEach(([key, value]: [key:string, value: string | Blob]) => {
+                formData.append(key, value);
+            });
+            res = await fetch(url, {
+                method: "POST",
+                body: formData,
+            });
+            if (res.ok) {
+                console.log('Uploaded successfully!');
+            } else {
+                console.error('Upload failed.');
+            }
+            if (!res.ok) throw Error(json.message)
+            const fileUrl = `${url}/${logoFileName}`
+            let data = { 
+                name,
+                logo: fileUrl || '',
+            }
+            mutate(mutateKey, mutateCreate(fileUrl), false)
             res = await fetch(`/api/create-restaurant-brand`, {
                 method: "POST",
                 headers: {
