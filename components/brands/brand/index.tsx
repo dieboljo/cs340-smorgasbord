@@ -15,7 +15,7 @@ export const Brand = ({ id, name, logo }) => {
             <p className={styles.id}>{id}</p>
             <div className={styles.name}>
                 {logo 
-                    ? <img src={`/logos/${logo}`} />
+                    ? <img src={logo} />
                     : <div className={styles.placeholder}></div>
                 }
                 <Link 
