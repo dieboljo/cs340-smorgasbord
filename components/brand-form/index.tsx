@@ -55,9 +55,6 @@ export const BrandForm = ({ brands, currentFilter }) => {
             formData.set('logo', logoFile);
             let res = await fetch('/api/upload', {
                 method: "POST",
-                //headers: {
-                //"Content-Type": "multipart/form-data",
-                //},
                 body: formData,
             });
             let json = await res.json()

@@ -27,5 +27,5 @@ export default async (req, res) => {
     .once('end', () => {
         res.status(200).json({ data: 'success'})
     });
-    form.parse(req)
+    await form.parse(req)
 };
