@@ -12,10 +12,10 @@ const handler: NextApiHandler = async (req, res) => {
                 `
                     SELECT *
                     FROM RestaurantBrands
-                    WHERE name = ?
+                    WHERE name LIKE ?
                     ORDER BY brandId DESC
                 `,
-                name
+                `%${name}%`
             )
             return res.json(results)
         } else {
@@ -31,16 +31,6 @@ const handler: NextApiHandler = async (req, res) => {
     } catch (e) {
         res.status(500).json({ message: e.message })
     }
-}
-
-const handlerSample: NextApiHandler = async (req, res) => {
-    const { name } = req.query
-    const results = {
-        brandId: 7777,
-        name: "Taco Town",
-        logo: "taco-town.png"
-    }
-    return res.json(results);
 }
 
 export default handler
