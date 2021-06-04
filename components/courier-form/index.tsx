@@ -30,6 +30,8 @@ export const CourierForm = () => {
             throw Error(err.message)
         } finally {
             setSubmitting(false)
+            setName('')
+            setEmail('')
         }
     }
 
