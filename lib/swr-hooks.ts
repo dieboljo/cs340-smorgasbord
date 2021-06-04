@@ -67,10 +67,17 @@ const useMenuItems = (location='') => {
     }
 }
 
-const useLineItems = (orderId='') => {
+const useLineItems = ({ orderId='', customerId='' } = {}) => {
     const defaultKey = `/api/get-line-items`
     const keyWithOrder = `/api/get-line-items?orderId=${orderId}`
-    const { data, error } = useSWR(orderId ? keyWithOrder : defaultKey, fetcher)
+    const keyWithCustomer = `/api/get-line-items?customerId=${customerId}`
+    let mutateKey = defaultKey
+    if (orderId) {
+        mutateKey = keyWithOrder
+    } else if (customerId) {
+        mutateKey = keyWithCustomer
+    }
+    const { data, error } = useSWR(mutateKey)
 
     return {
         lineItems: data,

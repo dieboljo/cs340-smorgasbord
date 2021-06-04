@@ -13,10 +13,13 @@ export const Order = ({
     status,
 }) => {
     const Router = useRouter()
+    const customerId = Array.isArray(Router.query?.customerId)
+        ? Router.query?.customerId[0]
+        : Router.query?.customerId || ""
     const detailsSubmit = () => {
         Router.push({
             pathname: '/orders/line-items',
-            query: { orderId: id },
+            query: { customerId, orderId: id },
         },
         '/orders/line-items')
     }
