@@ -1,6 +1,6 @@
 // components/header/index.tsx
 
-import cn from "classnames"
+import cn from "clsx"
 import styles from "./header.module.scss"
 import Link from "next/link"
 import { useRouter } from 'next/router'
@@ -48,25 +48,25 @@ export const Header = (): JSX.Element => {
     return (
         <header className={styles.header}>
             <Link href={`/?customerId=${customerId}`} as={'/'}>
-                <a className={styles.text}>Home</a>
+                <a className={cn(styles.text, styles.link)}>Home</a>
             </Link>
             <Link href={`/customers?customerId=${customerId}`} as='/customers'>
-                <a className={styles.text}>Customers & Couriers</a>
+                <a className={cn(styles.text, styles.link)}>Customers/Couriers</a>
             </Link>
             <Link href={`/brands?customerId=${customerId}`} as='/brands'>
-                <a className={styles.text}>RestaurantBrands</a>
+                <a className={cn(styles.text, styles.link)}>RestaurantBrands</a>
             </Link>
             <Link href={`/brands/locations?customerId=${customerId}`} as='/brands/locations'>
-                <a className={styles.text}>RestaurantLocations</a>
+                <a className={cn(styles.text, styles.link)}>RestaurantLocations</a>
             </Link>
             <Link href={`/brands/locations/menu-items?customerId=${customerId}`} as='/brands/locations/menu-items'>
-                <a className={styles.text}>MenuItems</a>
+                <a className={cn(styles.text, styles.link)}>MenuItems</a>
             </Link>
             <Link href={`/orders?customerId=${customerId}`} as='/orders'>
-                <a className={styles.text}>Orders</a>
+                <a className={cn(styles.text, styles.link)}>Orders</a>
             </Link>
             <Link href={`/orders/line-items?customerId=${customerId}`} as='/orders/line-items'>
-                <a className={styles.text}>LineItems</a>
+                <a className={cn(styles.text, styles.link)}>LineItems</a>
             </Link>
             {customerName &&
                 <div className={styles.right}> 
