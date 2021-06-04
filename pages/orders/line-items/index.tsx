@@ -72,11 +72,13 @@ export const LineItemsPage = () => {
                         <p>Courier: <span className='font-bold'>{order.courier}</span></p>
                     }
                 </div>
-                <div className={cn('w-60', 'm-auto')}>
-                    <Button disabled={completing} onClick={completeOrder}>
-                        {completing ? "Working ..." : "Complete Order"}
-                    </Button>
-                </div>
+                {order.status != "Complete" &&
+                    <div className={cn('w-60', 'm-auto')}>
+                        <Button disabled={completing} onClick={completeOrder}>
+                            {completing ? "Working ..." : "Complete Order"}
+                        </Button>
+                    </div>
+                }
             </>}
             <LineItems lineItems={lineItems} />
         </Layout>
