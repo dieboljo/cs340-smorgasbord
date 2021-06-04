@@ -3,57 +3,81 @@
 import cn from "classnames"
 import styles from "./header.module.scss"
 import Link from "next/link"
-import { useRouter } from 'next/router';
-import React, { useEffect, useState } from "react"
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 
-const convertCrumb = string => {
-  return string
-    .replace(/-/g, ' ')
-    .replace(/oe/g, 'ö')
-    .replace(/ae/g, 'ä')
-    .replace(/ue/g, 'ü')
-    .replace(/\?.*$/, '')
-    .replace(/\%20/, ' ')
-    .toUpperCase();
-};
+import Button from "@/components/button"
 
 export const Header = (): JSX.Element => {
+    const [customerName, setCustomerName] = useState('')
     const Router = useRouter();
-    const [crumbs, setCrumbs] = useState(null);
     const customerId = Router.query.customerId || ''
+    useEffect(() => {
+        setCustomerName('')
+    }, [Router.query.customerId])
+    const getCustomerName = async (id) => {
+        try {
+            let res = await fetch(`/api/get-customer?customerId=${customerId}`, {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                },
+            })
+            let json = await res.json()
+            if (!res.ok) throw Error(json.message)
+            if (json && json[0]) {
+                setCustomerName(json[0].name)
+            }
+        } catch (err) {
+            throw Error(err.message)
+        }
+    }
+
+    const customerLogoff = () => {
+        Router.query.customerId = ''
+        setCustomerName('')
+        Router.reload()
+    }
 
     useEffect(() => {
-        if (Router) {
-            const linkPath = Router.asPath.split('/');
-            linkPath.shift();
-
-            const pathArray = [];
-            linkPath.forEach((path, i) => {
-                if (path) {
-                    pathArray.push({ 
-                        breadCrumb: path, 
-                        href: '/' + linkPath.slice(0, i + 1).join('/') 
-                    });
-                }
-            });
-
-            setCrumbs(pathArray);
+        if (customerId) {
+            getCustomerName(customerId)
         }
-    }, [Router]);
+    }, [customerId])
 
     return (
         <header className={styles.header}>
             <Link href={`/?customerId=${customerId}`} as={'/'}>
-                <a className={styles.left}>HOME</a>
+                <a className={styles.text}>Home</a>
             </Link>
-            {crumbs && crumbs.map((crumb, crumbIdx) => (
-                <Link href={`${crumb.href}?customerId=${customerId}`} as={crumb.href} key={crumb.href}>
-                    <a>{'/ ' + convertCrumb(crumb.breadCrumb)}</a>
-                </Link>
-            ))}
+            <Link href={`/customers?customerId=${customerId}`} as='/customers'>
+                <a className={styles.text}>Customers & Couriers</a>
+            </Link>
+            <Link href={`/brands?customerId=${customerId}`} as='/brands'>
+                <a className={styles.text}>RestaurantBrands</a>
+            </Link>
+            <Link href={`/brands/locations?customerId=${customerId}`} as='/brands/locations'>
+                <a className={styles.text}>RestaurantLocations</a>
+            </Link>
+            <Link href={`/brands/locations/menu-items?customerId=${customerId}`} as='/brands/locations/menu-items'>
+                <a className={styles.text}>MenuItems</a>
+            </Link>
             <Link href={`/orders?customerId=${customerId}`} as='/orders'>
-                <a className={styles.right}>ORDERS</a>
+                <a className={styles.text}>Orders</a>
             </Link>
+            <Link href={`/orders/line-items?customerId=${customerId}`} as='/orders/line-items'>
+                <a className={styles.text}>LineItems</a>
+            </Link>
+            {customerName &&
+                <div className={styles.right}> 
+                    <span className={styles.text}>{customerName}</span>
+                    <Button
+                        onClick={customerLogoff}
+                        className={styles.button}>
+                        Logoff
+                    </Button>
+                </div>
+            }
         </header>
     )
 }

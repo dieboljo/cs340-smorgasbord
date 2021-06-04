@@ -62,20 +62,22 @@ export const LineItemsPage = () => {
         )
     }
     return (   
-        <Layout title={`Order #${orderId}`}>
-            <div className='orderContainer'>
-                <h2>{`Order #${order.orderId}`}</h2>
-                <p className={cn('font-bold', 'text-4xl', 'my-10')}>{order.location}</p>
-                <p>Status: <span className='font-bold'>{order.status}</span></p>
-                {order.courier &&
-                    <p>Courier: <span className='font-bold'>{order.courier}</span></p>
-                }
-            </div>
-            <div className={cn('w-60', 'm-auto')}>
-                <Button disabled={completing} onClick={completeOrder}>
-                    {completing ? "Working ..." : "Complete Order"}
-                </Button>
-            </div>
+        <Layout title={orderId ? `Order #${orderId}` : 'Line Items'}>
+            {orderId && <>
+                <div className='orderContainer'>
+                    <h2>{`Order #${order.orderId}`}</h2>
+                    <p className={cn('font-bold', 'text-4xl', 'my-10')}>{order.location}</p>
+                    <p>Status: <span className='font-bold'>{order.status}</span></p>
+                    {order.courier &&
+                        <p>Courier: <span className='font-bold'>{order.courier}</span></p>
+                    }
+                </div>
+                <div className={cn('w-60', 'm-auto')}>
+                    <Button disabled={completing} onClick={completeOrder}>
+                        {completing ? "Working ..." : "Complete Order"}
+                    </Button>
+                </div>
+            </>}
             <LineItems lineItems={lineItems} />
         </Layout>
     )

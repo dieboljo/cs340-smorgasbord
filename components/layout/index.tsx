@@ -10,12 +10,14 @@ import React, { ReactNode } from "react"
 type Props = {
     children?: ReactNode
     home?: boolean | null
+    id?: string
     title?: string
 }
 
 export const Layout = ({
     children,
     home = false,
+    id = '',
     title = "The Smorgasbord",
 }: Props): JSX.Element => {
     return (

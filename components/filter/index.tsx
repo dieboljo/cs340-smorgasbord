@@ -24,4 +24,30 @@ export const Filter = ({ filterAttribute='', filterFunc, isLoading, placeholder=
     )
 }
 
+export const BrandFilter = ({ filterAttribute='', filterFunc, isLoading, selected='', brands=[] }) => {
+    const [filter, setFilter] = useState(selected || '')
+    const filterText = filterAttribute ? ` by ${filterAttribute}` : ''
+
+    return (
+            <div className={styles.filter}>
+                <label htmlFor='filter-input'>Filter{filterText}:</label>
+                <select 
+                    className={styles.select}
+                    id='filter-input'
+                    onChange={(e) => setFilter(e.target.value)}
+                    value={filter}>
+                    <option value=''></option>
+                    {brands && brands.map(({ brandId, name }) => (
+                        <option value={brandId} key={brandId}> 
+                            {`${brandId} - ${name}`}
+                        </option>
+                    ))}
+                </select>
+                <Button disabled={isLoading} className={styles.button} onClick={() => filterFunc(filter)}>
+                    {isLoading ? "Filtering ..." : "Filter"}
+                </Button>
+            </div>
+    )
+}
+
 export default Filter

@@ -1,7 +1,0 @@
-.button {
-	background-color: black;
-	color: white;
-	font-size: 2rem;
-	padding: 2rem;
-	text-transform: uppercase;
-}

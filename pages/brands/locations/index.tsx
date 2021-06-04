@@ -2,10 +2,10 @@ import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import Skeleton from "react-loading-skeleton"
 
-import Filter from "@/components/filter"
+import { BrandFilter } from "@/components/filter"
 import Layout from "@/components/layout"
 import Restaurants from "@/components/restaurants"
-import { useLocations } from "@/lib/swr-hooks"
+import { useBrands, useLocations } from "@/lib/swr-hooks"
 
 export const LocationsPage = () => {
     const Router = useRouter()
@@ -15,6 +15,7 @@ export const LocationsPage = () => {
     const customerId = Router.query?.customerId || ""
     const [filterString, setFilterString] = useState(brandId)
     const { locations, isLoading } = useLocations(filterString)
+    const { brands } = useBrands()
 
     if (isLoading) {
         return (
@@ -36,11 +37,12 @@ export const LocationsPage = () => {
             <div className='heading'>
                 <h2 className='title'>Restaurant Locations</h2>
             </div>
-            <Filter
+            <BrandFilter
                 filterAttribute='Brand ID'
                 filterFunc={(id) => setFilterString(id)}
                 isLoading={isLoading}
-                placeholder={filterString}
+                selected={filterString}
+                brands={brands}
             />
             <Restaurants isFiltered={filterString} restaurants={locations} />
         </Layout>
