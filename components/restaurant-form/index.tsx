@@ -1,9 +1,10 @@
 import cn from "clsx"
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Router from 'next/router'
 import { mutate } from "swr"
 
 import Button from '@/components/button'
+import { useBrands } from '@/lib/swr-hooks'
 import styles from "./restaurant-form.module.scss"
 
 interface RestaurantData {
@@ -16,10 +17,14 @@ interface RestaurantData {
 
 export const RestaurantForm = (props) => {
     const [brandId, setBrandId] = useState(props.brandId || props.currentFilter)
+    useEffect(() => {
+        setBrandId(props.currentFilter)
+    }, [props.currentFilter])
     const [address, setAddress] = useState(props.address)
     const [openTime, setOpenTime] = useState(props.openTime)
     const [closeTime, setCloseTime] = useState(props.closeTime)
     const [submitting, setSubmitting] = useState(false)
+    const { brands } = useBrands()
 
     const mutateCreate = () => {
         let topId = { locationId: 1 }
@@ -115,15 +120,18 @@ export const RestaurantForm = (props) => {
         <div className={styles.row}> 
             <p>{props.id || ''}</p>
             <div className={styles.field}>
-                <input
-                    id="brandId"
-                    className={cn(styles.input, styles.name)}
-                    type="text"
-                    name="brandId"
-                    value={brandId}
-                    placeholder="Brand ID"
+                <select 
+                    className={styles.select}
+                    id='brandId'
                     onChange={(e) => setBrandId(e.target.value)}
-                />
+                    value={brandId}>
+                    <option value=''></option>
+                    {brands && brands.map(({ brandId, name }) => (
+                        <option value={brandId} key={brandId}> 
+                            {`${brandId} - ${name}`}
+                        </option>
+                    ))}
+                </select>
             </div>
             <div>
                 <div className={styles.field}>

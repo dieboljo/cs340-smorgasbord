@@ -30,13 +30,4 @@ const handler: NextApiHandler = async (req, res) => {
   }
 }
 
-const handlerSample: NextApiHandler = async (req, res) => {
-    const { email } = req.query
-    const results = {
-        customerId: 9999,
-        name: "Max Diebold"
-    }
-    return res.json(results);
-}
-
 export default handler

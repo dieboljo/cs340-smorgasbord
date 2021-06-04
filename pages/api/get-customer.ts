@@ -1,37 +1,27 @@
 import { NextApiHandler } from 'next'
-import { query } from '../../lib/db'
+import { query } from '@/lib/db'
 
 const handler: NextApiHandler = async (req, res) => {
-  const { id } = req.query
+  const { customerId } = req.query
   try {
-    if (!id) {
-      return res.status(400).json({ message: '`id` required' })
+    if (!customerId) {
+      return res.status(400).json({ message: '`customerId` required' })
     }
-    if (typeof parseInt(id.toString()) !== 'number') {
-      return res.status(400).json({ message: '`id` must be a number' })
+    if (typeof parseInt(customerId.toString()) !== 'number') {
+      return res.status(400).json({ message: '`customerId` must be a number' })
     }
     const results = await query(
-      `
-      SELECT id, title, content
-      FROM entries
-      WHERE id = ?
-    `,
-      id
+        `
+          SELECT * 
+          FROM Customers
+          WHERE customerId = ? 
+        `,
+        customerId
     )
-
-    return res.json(results[0])
+    return res.json(results)
   } catch (e) {
     res.status(500).json({ message: e.message })
   }
 }
 
-const handlerSample: NextApiHandler = async (req, res) => {
-    const { email } = req.query
-    const results = {
-        customerId: 9999,
-        name: "Max Diebold"
-    }
-    return res.json(results);
-}
-
-export default handlerSample
+export default handler

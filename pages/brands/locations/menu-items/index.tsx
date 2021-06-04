@@ -6,7 +6,7 @@ import { mutate } from "swr"
 import Cart from "@/components/cart"
 import Layout from "@/components/layout"
 import Menu from "@/components/menu"
-import Update from "@/components/update"
+import Update, { UpdateCustomer, UpdateLocation } from "@/components/update"
 import { useLineItems, useMenuItems, useOrder } from '@/lib/swr-hooks'
 
 export const MenuPage = () => {
@@ -119,22 +119,22 @@ export const MenuPage = () => {
                 <h2 className='title'>Menu Items</h2>
             </div>
             <div>
-            <Update
+            <UpdateCustomer
                 label='Customer ID'
                 updateFunc={(id) => {
                     setCustomerId(id);
                     Router.query.customerId = id;
                 }}
                 isLoading={orderLoading}
-                placeholder={customerId}
+                selected={customerId}
                 alert={customerAlert}
                 isAlerted={customerHighlight}
             />
-            <Update
+            <UpdateLocation
                 label='Location ID'
                 updateFunc={setLocationId}
                 isLoading={orderLoading}
-                placeholder={locationId}
+                selected={locationId}
                 alert={locationAlert}
                 isAlerted={locationHighlight}
             />

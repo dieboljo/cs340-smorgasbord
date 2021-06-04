@@ -51,7 +51,6 @@ export const BrandForm = ({ brands, currentFilter }) => {
             let json = await res.json()
             if (!res.ok) throw Error(json.message)
             const { url, fields } = json
-            console.log(url)
             const formData = new FormData();
             Object.entries({ ...fields, file: logoFile }).forEach(([key, value]: [key:string, value: string | Blob]) => {
                 formData.append(key, value);
