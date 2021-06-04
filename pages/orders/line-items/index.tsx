@@ -15,8 +15,11 @@ export const LineItemsPage = () => {
     const orderId = Array.isArray(Router.query?.orderId)
         ? Router.query?.orderId[0]
         : Router.query?.orderId || ""
+    const customerId = Array.isArray(Router.query?.customerId)
+        ? Router.query?.customerId[0]
+        : Router.query?.customerId || ""
     const { order, isLoading: orderLoading } = useOrder({ orderId })
-    const { lineItems, isLoading: lineItemsLoading } = useLineItems(orderId)
+    const { lineItems, isLoading: lineItemsLoading } = useLineItems({ orderId, customerId })
 
     const completeOrder = async (e) => {
         setCompleting(true)
