@@ -7,10 +7,10 @@ const handler: NextApiHandler = async (req, res) => {
       `
       SELECT courierId
       FROM Couriers
-      WHERE courierId NOT IN
+      WHERE Couriers.courierId NOT IN
       (
           SELECT courier FROM Orders
-          WHERE status = "On the way"
+          WHERE Orders.status = 'On the way'
       )
       `
     )
