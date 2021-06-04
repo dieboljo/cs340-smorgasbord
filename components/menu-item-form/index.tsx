@@ -94,6 +94,23 @@ export const MenuItemForm = (props) => {
         }
     }
 
+    const editButtons = (
+        <>
+            <Button className={styles.button} disabled={submitting} type="button" onClick={() => props.cancel()}>
+                Cancel
+            </Button>
+            <Button className={styles.button} disabled={submitting} type="button" onClick={submitHandler}>
+                {submitting ? 'Working ...' : 'Done'}
+            </Button>
+        </>
+    )
+
+    const createButtons = (
+        <Button className={styles.button} disabled={submitting} type="button" onClick={submitHandler}>
+            {submitting ? 'Creating ...' : 'Create'}
+        </Button>
+    )
+
     return (
         <div className={styles.row}> 
             <div className={cn(styles.field, styles.end)}>
@@ -129,14 +146,10 @@ export const MenuItemForm = (props) => {
                 />
             </div>
             <div>
-            {props.id &&
-                <Button className={styles.button} disabled={submitting} type="button" onClick={() => props.cancel()}>
-                    Cancel
-                </Button>
+            {props.id
+                ? editButtons
+                : createButtons
             }
-            <Button className={styles.button} disabled={submitting} type="button" onClick={submitHandler}>
-                {submitting ? 'Creating ...' : 'Create'}
-            </Button>
             </div>
         </div>
     )

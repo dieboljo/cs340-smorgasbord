@@ -2,7 +2,7 @@ import MenuItem from "./menu-item"
 import MenuItemForm from "@/components/menu-item-form"
 import styles from "./menu.module.scss"
 
-export const Menu = ({ menuItems, location, locationAlert, addToOrder }) => {
+export const Menu = ({ menuItems, location, locationAlert, addToOrder, itemDeleted }) => {
 
     return (
         <>
@@ -26,6 +26,7 @@ export const Menu = ({ menuItems, location, locationAlert, addToOrder }) => {
                             menuItems={menuItems}
                             name={menuItem.name}
                             price={menuItem.price}
+                            onDelete={id => itemDeleted(id)}
                         />
                     </div>
                 ))}

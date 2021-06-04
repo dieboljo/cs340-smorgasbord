@@ -17,6 +17,7 @@ export const MenuItem = ({
     locationAlert,
     addItem,
     menuItems,
+    onDelete,
 }) => {
     const [quantity, setQuantity] = useState(0)
     const [deleting, setDeleting] = useState(false)
@@ -36,6 +37,7 @@ export const MenuItem = ({
         try {
             setDeleting(true)
             mutate(mutateKey, mutateDelete(), false)
+            onDelete(id)
             let res = await fetch(`/api/delete-menu-item?menuItemId=${id}`, {
                 method: "DELETE",
             })
@@ -44,8 +46,6 @@ export const MenuItem = ({
             mutate(mutateKey)
         } catch(e) {
             throw Error(e.message)
-        } finally {
-            setDeleting(false)
         }
     }
 

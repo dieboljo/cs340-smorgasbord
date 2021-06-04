@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { mutate } from 'swr'
 
@@ -8,6 +8,9 @@ import styles from "./cart-item.module.scss"
 
 export const CartItem = ({ cartItems, id, order, quantity, menuItem, name, price }) => {
     const [newQuantity, setNewQuantity] = useState(quantity)
+    useEffect(() => {
+        setNewQuantity(quantity)
+    }, [quantity])
     const [removing, setRemoving] = useState(false)
     const [updating, setUpdating] = useState(false)
     const totalPrice = (price * quantity).toFixed(2)

@@ -28,9 +28,17 @@ export const MenuPage = () => {
 
     const { order, isError: orderError, isLoading: orderLoading } = useOrder({ locationId, customerId });
     const { menuItems, isLoading: menuItemsLoading } = useMenuItems(locationId);
-    const { lineItems, isLoading: lineItemsLoading } = useLineItems(
-        order && order.orderId
-    );
+    const { lineItems, isLoading: lineItemsLoading } = useLineItems({
+        orderId: order ? order.orderId : ''
+    });
+
+    const mutateDelete = async (menuItemId) => {
+        const filteredLineItems = lineItems.filter(lineItem => {
+            return lineItem.menuItem != menuItemId
+        })
+        await mutate(`/api/get-line-items?orderId=${order.orderId}`, filteredLineItems, false)
+        mutate(`/api/get-line-items?orderId=${order.orderId}`)
+    }
 
     const mutateCreate = (menuItemId, quantity) => {
         let topId = { lineItemId: 1 }
@@ -58,6 +66,16 @@ export const MenuPage = () => {
         return [newLineItem, ...lineItems]
     }
 
+    const mutateEdit = (lineItemId, newQuantity) => {
+        const updatedLineItems = lineItems.map(lineItem => {
+            if (lineItem.lineItemId != lineItemId) {
+                return lineItem
+            }
+            return {...lineItem, quantity: newQuantity}
+        })
+        return updatedLineItems
+    }
+
     const addToOrder = async (menuItemId, quantity) => {
         if (!orderLoading) {
             try {
@@ -72,23 +90,45 @@ export const MenuPage = () => {
                 }
                 if (alerted) return
                 if (quantity == 0) return
-                let data = {
-                    order: order.orderId,
-                    menuItem: menuItemId,
-                    quantity,
+                const existingItem = lineItems.filter(lineItem => lineItem.menuItem == menuItemId)
+                if (existingItem && existingItem[0]) {
+                    let id = existingItem[0].lineItemId
+                    let newQuantity = existingItem[0].quantity + quantity
+                    let data = {
+                        lineItemId: id,
+                        quantity: newQuantity,
+                    }
+                    mutate(`/api/get-line-items?orderId=${order.orderId}`,
+                           mutateEdit(id, newQuantity), false)
+                    let res = await fetch(`/api/edit-line-item`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(data),
+                    })
+                    let json = await res.json()
+                    if (!res.ok) throw Error(json.message)
+                    mutate(`/api/get-line-items?orderId=${order.orderId}`)
+                } else {
+                    let data = {
+                        order: order.orderId,
+                        menuItem: menuItemId,
+                        quantity,
+                    }
+                    mutate(`/api/get-line-items?orderId=${order.orderId}`,
+                           mutateCreate(menuItemId, quantity), false)
+                    let res = await fetch(`/api/create-line-item`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(data),
+                    })
+                    let json = await res.json()
+                    if (!res.ok) throw Error(json.message)
+                    mutate(`/api/get-line-items?orderId=${order.orderId}`)
                 }
-                mutate(`/api/get-line-items?orderId=${order.orderId}`,
-                       mutateCreate(menuItemId, quantity), false)
-                let res = await fetch(`/api/create-line-item`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(data),
-                })
-                let json = await res.json()
-                if (!res.ok) throw Error(json.message)
-                mutate(`/api/get-line-items?orderId=${order.orderId}`)
             } catch (err) {
                 throw Error(err.message)
             }
@@ -144,6 +184,7 @@ export const MenuPage = () => {
                 location={locationId}
                 addToOrder={addToOrder} 
                 locationAlert={locationAlert}
+                itemDeleted={id => mutateDelete(id)}
             />
             {order && order.orderId && !orderLoading && !orderError &&
                 <Cart

@@ -44,7 +44,6 @@ export const UpdateCustomer = ({ alert, isAlerted, label, selected, updateFunc, 
 
     const submitFunc = () => {
         updateFunc(customer);
-        setCustomer('');
     }
 
     return (
@@ -80,7 +79,6 @@ export const UpdateLocation = ({ alert, isAlerted, label, selected, updateFunc, 
 
     const submitFunc = () => {
         updateFunc(location);
-        setLocation('');
     }
 
     return (

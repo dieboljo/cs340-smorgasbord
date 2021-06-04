@@ -77,7 +77,7 @@ const useLineItems = ({ orderId='', customerId='' } = {}) => {
     } else if (customerId) {
         mutateKey = keyWithCustomer
     }
-    const { data, error } = useSWR(mutateKey)
+    const { data, error } = useSWR(mutateKey, fetcher)
 
     return {
         lineItems: data,
